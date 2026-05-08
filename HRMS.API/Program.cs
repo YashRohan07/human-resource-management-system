@@ -36,6 +36,13 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+    await DbSeeder.SeedAsync(dbContext);
+}
+
 // Swagger only in development
 if (app.Environment.IsDevelopment())
 {
