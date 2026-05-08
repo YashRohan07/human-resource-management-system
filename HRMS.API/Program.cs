@@ -1,3 +1,8 @@
+using FluentValidation.AspNetCore;
+using HRMS.API.Data;
+using HRMS.API.Middleware;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +11,16 @@ builder.Services.AddControllers();
 // Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// FluentValidation
+builder.Services.AddFluentValidationAutoValidation();
+
+// Application database context
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
 // CORS
 builder.Services.AddCors(options =>
@@ -31,7 +46,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseRouting();
+// Global exception handler
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseCors("AllowAngular");
 
