@@ -1,3 +1,4 @@
+using HRMS.API.Data.QueryModels;
 using HRMS.API.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,6 +25,9 @@ public class ApplicationDbContext : DbContext
     // Monthly payroll records
     public DbSet<Payroll> Payrolls => Set<Payroll>();
 
+    // Keyless model for stored procedure result
+    public DbSet<PayrollSummaryResult> PayrollSummaryResults => Set<PayrollSummaryResult>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -32,6 +36,7 @@ public class ApplicationDbContext : DbContext
         ConfigureEmployee(modelBuilder);
         ConfigureSalary(modelBuilder);
         ConfigurePayroll(modelBuilder);
+        ConfigureQueryModels(modelBuilder);
     }
 
     private static void ConfigureAppUser(ModelBuilder modelBuilder)
@@ -208,6 +213,20 @@ public class ApplicationDbContext : DbContext
                 x.Year
             })
             .HasDatabaseName("IX_Payroll_Month_Year");
+        });
+    }
+
+    private static void ConfigureQueryModels(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<PayrollSummaryResult>(entity =>
+        {
+            // This class is mapped to stored procedure output, not a table
+            entity.HasNoKey();
+
+            entity.ToView(null);
+
+            entity.Property(x => x.TotalSalary)
+                .HasColumnType("decimal(18,2)");
         });
     }
 
