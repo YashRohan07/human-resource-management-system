@@ -2,15 +2,15 @@
 
 ## Architecture Style
 
-This project follows a simple Layered Architecture approach.
+This project follows a Layered Architecture approach.
 
-The goal is to keep the codebase clean, organized, and easy to maintain while avoiding unnecessary complexity.
+The goal is to keep the codebase clean, organized, and easy to maintain without adding unnecessary complexity.
 
-Each layer is responsible for a specific part of the application to keep the code easier to manage and maintain.
+Each layer is responsible for a specific part of the application.
 
 ---
 
-## High-Level Request Flow
+# High-Level Request Flow
 
 ```text
 Angular Frontend
@@ -24,69 +24,181 @@ Repository Layer
 ApplicationDbContext
         ↓
 SQL Server Database
-````
+```
 
 ---
 
-## Backend Architecture Overview
+# Backend Architecture Overview
 
-### Controllers
+## Controllers
 
 Controllers handle incoming HTTP requests and return API responses.
 
-Responsibilities:
+### Responsibilities
 
-* Receive requests
-* Call service methods
-* Return standardized API responses
+- Receive requests
+- Call service methods
+- Return API responses
 
 Controllers should remain thin and should not contain business logic.
 
 ---
 
-### Services
+## Services
 
 Services contain application logic and business rules.
 
-Responsibilities:
+### Responsibilities
 
-* Handle business operations
-* Validate business rules
-* Coordinate repositories
-* Throw custom exceptions when needed
+- Handle business operations
+- Validate business rules
+- Coordinate repositories
+- Throw custom exceptions when needed
 
 ---
 
-### Repositories
+## Repositories
 
 Repositories handle database-related operations using Entity Framework Core.
 
-Responsibilities:
+### Responsibilities
 
-* Query data
-* Insert/update/delete records
-* Keep EF Core logic separated from services
+- Query data
+- Insert/update/delete records
+- Keep EF Core logic separated from services
 
 Repositories should not contain business logic.
 
 ---
 
-### ApplicationDbContext
+## ApplicationDbContext
 
 ApplicationDbContext is the main EF Core database context.
 
-Responsibilities:
+### Responsibilities
 
-* Manage database connection
-* Configure entities and relationships
-* Execute database queries
-* Handle migrations
-
-Entity configurations will be added gradually in later phases.
+- Manage database connection
+- Configure entities and relationships
+- Configure indexes
+- Execute database operations
+- Handle migrations
 
 ---
 
-## Frontend Architecture Overview
+# Database Design Overview
+
+Current core modules:
+
+- Authentication
+- Employees
+- Salaries
+- Payrolls
+
+The database uses:
+
+- Entity Framework Core
+- SQL Server
+- Fluent API configurations
+- Migrations
+- Stored Procedures
+
+---
+
+# Entity Design
+
+## BaseEntity
+
+Contains shared fields used by multiple entities.
+
+### Common Fields
+
+- Id
+- CreatedAt
+- UpdatedAt
+
+---
+
+## SoftDeletableEntity
+
+Extends `BaseEntity` and adds soft delete support.
+
+### Additional Field
+
+```text
+IsDeleted
+```
+
+Employees use soft delete to preserve payroll history.
+
+---
+
+# Relationship Design
+
+## Employee → Salary
+
+```text
+One-to-One
+```
+
+Each employee has one current salary configuration.
+
+---
+
+## Employee → Payroll
+
+```text
+One-to-Many
+```
+
+Each employee can have multiple payroll records over time.
+
+---
+
+# Payroll Snapshot Design
+
+Payroll records store salary snapshots.
+
+Example:
+
+```text
+BasicSalarySnapshot
+BonusSnapshot
+DeductionSnapshot
+```
+
+This prevents old payroll history from changing if salary values are updated later.
+
+---
+
+# Query Models
+
+The project uses query models for stored procedure results.
+
+Example:
+
+```text
+PayrollSummaryResult
+```
+
+This model is not mapped as a database table.
+
+---
+
+# Stored Procedures
+
+## sp_GetPayrollSummaryByMonth
+
+Used for payroll reporting and summary generation.
+
+Returns:
+
+- Department
+- TotalEmployees
+- TotalSalary
+
+---
+
+# Frontend Architecture Overview
 
 The frontend is built using Angular standalone components.
 
@@ -98,44 +210,46 @@ shared/
 features/
 ```
 
-### core/
+---
+
+## core/
 
 Contains application-wide services, guards, and interceptors.
 
 Examples:
 
-* auth.interceptor.ts
-* error.interceptor.ts
-* auth.guard.ts
+- auth.interceptor.ts
+- error.interceptor.ts
+- auth.guard.ts
 
 ---
 
-### shared/
+## shared/
 
 Contains reusable components, utilities, and interfaces.
 
 Examples:
 
-* loading spinner
-* shared models
-* reusable UI components
+- shared models
+- reusable UI components
+- loading spinner
 
 ---
 
-### features/
+## features/
 
 Contains feature-specific modules and screens.
 
 Examples:
 
-* employees
-* salaries
-* payrolls
-* dashboard
+- employees
+- salaries
+- payrolls
+- dashboard
 
 ---
 
-## API Structure
+# API Structure
 
 All APIs use versioned routes.
 
@@ -153,7 +267,7 @@ Example:
 
 ---
 
-## Standard API Response Format
+# Standard API Response Format
 
 The backend uses a consistent API response structure through `ApiResponse<T>`.
 
@@ -181,76 +295,55 @@ Error example:
 
 ---
 
-## Global Exception Handling
+# Global Exception Handling
 
 Global exception handling is managed through `ExceptionMiddleware`.
 
-Responsibilities:
+### Responsibilities
 
-* Catch unhandled exceptions
-* Return consistent error responses
-* Convert exceptions into proper HTTP status codes
+- Catch unhandled exceptions
+- Return consistent error responses
+- Convert exceptions into proper HTTP status codes
 
 Examples:
 
-* 400 Bad Request
-* 404 Not Found
-* 409 Conflict
-* 500 Internal Server Error
+- 400 Bad Request
+- 404 Not Found
+- 409 Conflict
+- 500 Internal Server Error
 
 ---
 
-## Base Entity Design
+# Security
 
-Common entity fields are managed through shared base classes.
+Authentication and authorization will be expanded in later phases.
 
-### BaseEntity
+Current security features:
 
-Contains common fields such as:
+- BCrypt password hashing
+- Role field support
+- Seed admin users
 
-* Id
-* CreatedAt
-* UpdatedAt
+Planned:
 
-### SoftDeletableEntity
-
-Extends `BaseEntity` and adds soft delete support.
-
-```text
-IsDeleted = true
-```
-
-Soft delete behavior will be implemented in later phases where necessary.
+- JWT Authentication
+- Role-based Authorization
 
 ---
 
-## Security
+# Database Migrations
 
-JWT authentication and role-based authorization
-will be implemented in later phases.
+Entity Framework Core migrations are used to manage database schema changes.
 
-Planned roles:
+Benefits:
 
-* Admin
-* HR
-
----
-
-## Database Design
-
-The database schema will be finalized gradually
-as entities and business requirements are implemented.
-
-Planned core modules include:
-
-* Employee
-* Salary
-* Payroll
-* Authentication
+- Keep database schema consistent
+- Track schema updates
+- Easier setup for development
 
 ---
 
-## CORS Configuration
+# CORS Configuration
 
 CORS is configured to allow Angular frontend requests during development.
 
@@ -262,7 +355,7 @@ http://localhost:4200
 
 ---
 
-## Middleware Pipeline
+# Middleware Pipeline
 
 Current middleware pipeline:
 
@@ -277,4 +370,3 @@ Controllers
 ```
 
 This setup keeps request handling centralized and easier to maintain.
-

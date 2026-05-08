@@ -6,23 +6,43 @@ The project is being developed phase-by-phase with a focus on layered architectu
 
 ---
 
-## Tech Stack
+# Tech Stack
 
-### Backend
+## Backend
 
 - ASP.NET Core Web API
 - Entity Framework Core
 - SQL Server
 - FluentValidation
+- BCrypt Password Hashing
 - JWT Authentication 
 
-### Frontend
+---
+
+## Frontend
 
 - Angular 19
 
 ---
 
-## Project Structure
+# Current Features
+
+- Employee entity structure
+- Salary entity structure
+- Payroll entity structure
+- Entity relationships
+- Soft delete support
+- SQL Server integration
+- Entity Framework Core migrations
+- Database indexes
+- Payroll summary stored procedure
+- Seed admin users
+- Global exception handling
+- CORS configuration
+
+---
+
+# Project Structure
 
 ```text
 HRMS/
@@ -35,7 +55,7 @@ HRMS/
 
 ---
 
-## Backend Architecture
+# Backend Architecture
 
 The backend follows a simple layered architecture approach.
 
@@ -53,31 +73,70 @@ SQL Server
 
 ---
 
-## Features Planned
+# Database Design
 
-- Employee Management
-- Salary Management
-- Payroll Management
-- Role-based Authentication
-- Dashboard & Reporting
-- PDF Report Generation
+Current core modules:
+
+- Authentication
+- Employees
+- Salaries
+- Payrolls
+
+Main relationships:
+
+```text
+Employee → Salary = One-to-One
+Employee → Payroll = One-to-Many
+```
 
 ---
 
-## Documentation
+# Security
+
+Current security features:
+
+- BCrypt password hashing
+- Seed admin users
+- Role field support
+
+Planned security features:
+
+- JWT Authentication
+- Role-based Authorization
+
+---
+
+# Stored Procedure
+
+
+```text
+sp_GetPayrollSummaryByMonth
+```
+
+Used for payroll summary reporting.
+
+---
+
+# Documentation
 
 Project documentation is available inside the `Documentation` folder.
 
+- SYSTEM_ARCHITECTURE.md
+- DATABASE_SCHEMA.md
+- API_ENDPOINTS.md
+
 ---
 
-## Setup Instructions
+# Setup Instructions
 
-### Backend
+## Backend
 
 ```bash
 cd HRMS.API
 
 dotnet restore
+
+dotnet ef database update
 
 dotnet run
 ```
@@ -96,11 +155,12 @@ http://localhost:5243/swagger
 
 ---
 
-### Frontend
+## Frontend
 
 ```bash
 cd hrms-client
 
+npm install
 ng serve
 ```
 
@@ -109,5 +169,14 @@ Frontend runs on:
 ```text
 http://localhost:4200
 ```
+
+---
+
+# Default Seed Users
+
+| Role | Email |
+|---|---|
+| Admin | admin@hrms.com |
+| HR | hr@hrms.com |
 
 ---
