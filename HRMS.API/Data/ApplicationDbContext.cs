@@ -2,10 +2,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HRMS.API.Data;
 
-// Main EF Core database context
+// Main database context
 public class ApplicationDbContext : DbContext
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    public ApplicationDbContext(
+        DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
     }
@@ -14,6 +15,6 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // Entity configurations will be added in later phases
+        // Entity configurations will be added later
     }
 }

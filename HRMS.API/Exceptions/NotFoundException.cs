@@ -1,6 +1,6 @@
 namespace HRMS.API.Exceptions;
 
-// Used when requested data is not found
+// Thrown when requested data is missing
 public class NotFoundException : AppException
 {
     public NotFoundException(string message)

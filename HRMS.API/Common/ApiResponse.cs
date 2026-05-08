@@ -1,5 +1,6 @@
 namespace HRMS.API.Common;
 
+// Standard API response wrapper
 public class ApiResponse<T>
 {
     public bool Success { get; set; }

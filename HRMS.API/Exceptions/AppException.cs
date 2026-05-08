@@ -1,6 +1,6 @@
 namespace HRMS.API.Exceptions;
 
-// Base exception for expected application errors
+// Base exception for application-level errors
 public class AppException : Exception
 {
     public int StatusCode { get; }

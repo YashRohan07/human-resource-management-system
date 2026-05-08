@@ -1,6 +1,6 @@
 namespace HRMS.API.Exceptions;
 
-// Used for duplicate or conflicting data
+// Thrown when conflicting data is found
 public class ConflictException : AppException
 {
     public ConflictException(string message)

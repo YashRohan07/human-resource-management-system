@@ -6,7 +6,7 @@ using System.Text.Json;
 
 namespace HRMS.API.Middleware;
 
-// Handles all unhandled exceptions globally
+// Handles application exceptions globally
 public class ExceptionMiddleware
 {
     private readonly RequestDelegate _next;
@@ -20,7 +20,6 @@ public class ExceptionMiddleware
     {
         try
         {
-            // Pass request to next middleware
             await _next(context);
         }
         catch (Exception exception)
@@ -92,8 +91,7 @@ public class ExceptionMiddleware
                 break;
         }
 
-        var jsonResponse =
-            JsonSerializer.Serialize(response);
+        var jsonResponse = JsonSerializer.Serialize(response);
 
         await context.Response.WriteAsync(jsonResponse);
     }

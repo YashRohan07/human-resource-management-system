@@ -1,5 +1,6 @@
 namespace HRMS.API.Common;
 
+// Pagination information
 public class PaginationMeta
 {
     public int CurrentPage { get; set; }
