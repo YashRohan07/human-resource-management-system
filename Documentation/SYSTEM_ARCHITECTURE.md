@@ -4,7 +4,7 @@
 
 This project follows a Layered Architecture approach.
 
-The goal is to keep the codebase clean, organized, and easy to maintain without adding unnecessary complexity.
+The goal is to keep the codebase clean, organized, and easy to maintain.
 
 Each layer is responsible for a specific part of the application.
 
@@ -25,6 +25,8 @@ ApplicationDbContext
         ↓
 SQL Server Database
 ```
+
+Repository layer implementation will be added in upcoming phases.
 
 ---
 
@@ -140,7 +142,7 @@ Employees use soft delete to preserve payroll history.
 One-to-One
 ```
 
-Each employee has one current salary configuration.
+Each employee can have zero or one current salary configuration.
 
 ---
 
@@ -200,7 +202,7 @@ Returns:
 
 # Frontend Architecture Overview
 
-The frontend is built using Angular standalone components.
+The frontend is planned using Angular standalone components.
 
 Main frontend structure:
 
@@ -308,6 +310,8 @@ Global exception handling is managed through `ExceptionMiddleware`.
 Examples:
 
 - 400 Bad Request
+- 401 Unauthorized
+- 403 Forbidden
 - 404 Not Found
 - 409 Conflict
 - 500 Internal Server Error
@@ -316,18 +320,59 @@ Examples:
 
 # Security
 
-Authentication and authorization will be expanded in later phases.
+The project uses JWT-based authentication and role-based authorization.
 
-Current security features:
+## Authentication Flow
+
+```text
+User sends email and password
+        ↓
+AuthController receives login request
+        ↓
+AuthService verifies user credentials
+        ↓
+PasswordHasher verifies BCrypt password hash
+        ↓
+JwtHelper generates JWT token
+        ↓
+Client receives token
+```
+
+---
+
+## Authorization
+
+Protected endpoints use:
+
+```csharp
+[Authorize]
+```
+
+Admin-only endpoints use:
+
+```csharp
+[Authorize(Roles = "Admin")]
+```
+
+JWT tokens currently store:
+
+- User Id
+- Email
+- Role
+
+This allows the API to identify users and control role-based access without server-side sessions.
+
+---
+
+## Current Security Features
 
 - BCrypt password hashing
-- Role field support
-- Seed admin users
-
-Planned:
-
-- JWT Authentication
-- Role-based Authorization
+- JWT token generation
+- Role-based authorization
+- Protected endpoints
+- Admin-only endpoints
+- 401 Unauthorized handling
+- 403 Forbidden handling
 
 ---
 
@@ -365,6 +410,10 @@ HTTPS Redirection
 Exception Middleware
         ↓
 CORS
+        ↓
+Authentication
+        ↓
+Authorization
         ↓
 Controllers
 ```

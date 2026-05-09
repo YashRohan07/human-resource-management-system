@@ -15,7 +15,7 @@ The project is being developed phase-by-phase with a focus on layered architectu
 - SQL Server
 - FluentValidation
 - BCrypt Password Hashing
-- JWT Authentication 
+- JWT Authentication
 
 ---
 
@@ -36,9 +36,13 @@ The project is being developed phase-by-phase with a focus on layered architectu
 - Entity Framework Core migrations
 - Database indexes
 - Payroll summary stored procedure
-- Seed admin users
+- Seed Admin and HR users
 - Global exception handling
 - CORS configuration
+- JWT login endpoint
+- Role-based authorization
+- Protected route testing
+- Admin-only endpoint testing
 
 ---
 
@@ -71,6 +75,8 @@ ApplicationDbContext
 SQL Server
 ```
 
+Repository layer implementation will be added in upcoming phases.
+
 ---
 
 # Database Design
@@ -85,7 +91,7 @@ Current core modules:
 Main relationships:
 
 ```text
-Employee → Salary = One-to-One
+Employee → Salary = One-to-Zero-or-One
 Employee → Payroll = One-to-Many
 ```
 
@@ -96,18 +102,15 @@ Employee → Payroll = One-to-Many
 Current security features:
 
 - BCrypt password hashing
-- Seed admin users
-- Role field support
-
-Planned security features:
-
 - JWT Authentication
 - Role-based Authorization
+- Seed Admin and HR users
+- Protected API endpoints
+- Admin-only endpoint support
 
 ---
 
 # Stored Procedure
-
 
 ```text
 sp_GetPayrollSummaryByMonth
@@ -169,14 +172,3 @@ Frontend runs on:
 ```text
 http://localhost:4200
 ```
-
----
-
-# Default Seed Users
-
-| Role | Email |
-|---|---|
-| Admin | admin@hrms.com |
-| HR | hr@hrms.com |
-
----

@@ -1,0 +1,179 @@
+# API Endpoints
+
+This document contains the current API endpoints of the HRMS project.
+
+Base URL:
+
+```text
+/api/v1
+````
+
+---
+
+# Authentication APIs
+
+Base Route:
+
+```text
+/api/v1/auth
+```
+
+| Method | Endpoint    | Description                | Authorization  |
+| ------ | ----------- | -------------------------- | -------------- |
+| POST   | /login      | Login and return JWT token | Public         |
+| GET    | /profile    | Test protected user access | Logged-in User |
+| GET    | /admin-only | Test admin-only access     | Admin Only     |
+
+---
+
+# Login Request Example
+
+## Request
+
+```http
+POST /api/v1/auth/login
+```
+
+```json
+{
+  "email": "admin@hrms.com",
+  "password": "Admin123!"
+}
+```
+
+---
+
+## Success Response
+
+```json
+{
+  "success": true,
+  "message": "Login successful",
+  "data": {
+    "token": "JWT_TOKEN",
+    "email": "admin@hrms.com",
+    "fullName": "System Admin",
+    "role": "Admin",
+    "expiresAt": "2026-05-09T16:17:37Z"
+  },
+  "errors": null
+}
+```
+
+---
+
+# Employee APIs
+
+Base Route:
+
+```text
+/api/v1/employees
+```
+
+| Method | Endpoint  | Description          | Authorization |
+| ------ | --------- | -------------------- | ------------- |
+| GET    | /         | Get employee list    | Planned       |
+| GET    | /{id:int} | Get employee details | Planned       |
+| POST   | /         | Create employee      | Planned       |
+| PUT    | /{id:int} | Update employee      | Planned       |
+| DELETE | /{id:int} | Soft delete employee | Planned       |
+
+---
+
+# Salary APIs
+
+Base Route:
+
+```text
+/api/v1/salaries
+```
+
+| Method | Endpoint                   | Description         | Authorization |
+| ------ | -------------------------- | ------------------- | ------------- |
+| GET    | /employee/{employeeId:int} | Get employee salary | Planned       |
+| POST   | /                          | Create salary       | Planned       |
+| PUT    | /{id:int}                  | Update salary       | Planned       |
+
+---
+
+# Payroll APIs
+
+Base Route:
+
+```text
+/api/v1/payrolls
+```
+
+| Method | Endpoint                   | Description                  | Authorization |
+| ------ | -------------------------- | ---------------------------- | ------------- |
+| POST   | /generate                  | Generate monthly payroll     | Planned       |
+| GET    | /                          | Get payroll list             | Planned       |
+| GET    | /{id:int}                  | Get payroll details          | Planned       |
+| GET    | /employee/{employeeId:int} | Get employee payroll history | Planned       |
+| GET    | /summary                   | Get payroll summary          | Planned       |
+
+---
+
+# Dashboard API
+
+Base Route:
+
+```text
+/api/v1/dashboard
+```
+
+| Method | Endpoint | Description           | Authorization |
+| ------ | -------- | --------------------- | ------------- |
+| GET    | /        | Get dashboard summary | Planned       |
+
+---
+
+# Authorization Notes
+
+## Public Endpoint
+
+Public endpoints do not require login.
+
+Example:
+
+```text
+POST /api/v1/auth/login
+```
+
+---
+
+## Protected Endpoint
+
+Protected endpoints require a valid JWT token.
+
+Example:
+
+```text
+GET /api/v1/auth/profile
+```
+
+---
+
+## Admin Only Endpoint
+
+Admin-only endpoints require:
+
+```text
+Role = Admin
+```
+
+Example:
+
+```text
+GET /api/v1/auth/admin-only
+```
+
+---
+
+# Default Seed Users
+
+| Role  | Email                                   |
+| ----- | --------------------------------------- |
+| Admin | [admin@hrms.com](mailto:admin@hrms.com) |
+| HR    | [hr@hrms.com](mailto:hr@hrms.com)       |
+

@@ -20,6 +20,8 @@ HRMSDb
 
 Stores application login users.
 
+AppUsers are used only for system login and role-based access.
+
 ### Columns
 
 | Column | Type | Notes |
@@ -107,7 +109,9 @@ Payroll values are stored as snapshots so old payroll records remain unchanged e
 One-to-One
 ```
 
-One employee has one current salary record.
+One employee can have zero or one current salary record.
+
+An employee can be created first, and salary can be assigned later.
 
 ---
 
@@ -136,6 +140,18 @@ This helps preserve payroll history and related records.
 ---
 
 # Indexes
+
+## AppUsers
+
+### Unique Login Email Index
+
+```text
+IX_AppUser_Email
+```
+
+Prevents duplicate login emails for system users.
+
+---
 
 ## Employees
 
@@ -200,3 +216,4 @@ Default users are added automatically during application startup if the database
 | HR | hr@hrms.com |
 
 Passwords are stored using BCrypt hashing.
+
