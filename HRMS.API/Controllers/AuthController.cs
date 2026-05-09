@@ -1,6 +1,7 @@
 using HRMS.API.Common;
 using HRMS.API.DTOs.Auth;
 using HRMS.API.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HRMS.API.Controllers;
@@ -30,5 +31,31 @@ public class AuthController : ControllerBase
         };
 
         return Ok(response);
+    }
+
+    [Authorize]
+    [HttpGet("profile")]
+    public IActionResult GetProfile()
+    {
+        return Ok(new ApiResponse<object>
+        {
+            Success = true,
+            Message = "Authorized user access successful",
+            Data = new
+            {
+                User = User.Identity?.Name
+            }
+        });
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpGet("admin-only")]
+    public IActionResult AdminOnly()
+    {
+        return Ok(new ApiResponse<object>
+        {
+            Success = true,
+            Message = "Admin access successful"
+        });
     }
 }
