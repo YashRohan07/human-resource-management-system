@@ -1,7 +1,11 @@
+using System.Text;
 using FluentValidation.AspNetCore;
 using HRMS.API.Data;
 using HRMS.API.Middleware;
+using HRMS.API.Security;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +38,43 @@ builder.Services.AddCors(options =>
     });
 });
 
+// Register security helpers
+builder.Services.AddScoped<JwtHelper>();
+builder.Services.AddScoped<PasswordHasher>();
+
+// JWT authentication setup
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+var secretKey = jwtSettings["SecretKey"];
+
+if (string.IsNullOrWhiteSpace(secretKey))
+{
+    throw new InvalidOperationException("JWT secret key is missing.");
+}
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+
+            ValidIssuer = jwtSettings["Issuer"],
+            ValidAudience = jwtSettings["Audience"],
+
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(secretKey)
+            ),
+
+            // Token expires exactly at configured time
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+
+builder.Services.AddAuthorization();
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -57,9 +98,9 @@ app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseCors("AllowAngular");
 
-// Will be added in future phases
-// app.UseAuthentication();
-// app.UseAuthorization();
+// Authentication must run before authorization
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 
