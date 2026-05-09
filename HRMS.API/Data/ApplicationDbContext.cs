@@ -13,7 +13,7 @@ public class ApplicationDbContext : DbContext
     {
     }
 
-    // Authentication users are kept separate from employee records
+    // Authentication users are separate from employee records
     public DbSet<AppUser> AppUsers => Set<AppUser>();
 
     // Main HR records
@@ -55,9 +55,10 @@ public class ApplicationDbContext : DbContext
                 .HasMaxLength(150)
                 .IsRequired();
 
-            // Login email should be unique
+            // Login email must be unique
             entity.HasIndex(x => x.Email)
-                .IsUnique();
+                .IsUnique()
+                .HasDatabaseName("IX_AppUser_Email");
 
             entity.Property(x => x.PasswordHash)
                 .HasMaxLength(500)
