@@ -70,13 +70,47 @@ Base Route:
 /api/v1/employees
 ```
 
-| Method | Endpoint  | Description          | Authorization |
-| ------ | --------- | -------------------- | ------------- |
-| GET    | /         | Get employee list    | Planned       |
-| GET    | /{id:int} | Get employee details | Planned       |
-| POST   | /         | Create employee      | Planned       |
-| PUT    | /{id:int} | Update employee      | Planned       |
-| DELETE | /{id:int} | Soft delete employee | Planned       |
+| Method | Endpoint  | Description                                   | Authorization |
+| ------ | --------- | --------------------------------------------- | ------------- |
+| GET    | /         | Get employee list with pagination and filters | Admin, HR     |
+| GET    | /{id:int} | Get employee details                          | Admin, HR     |
+| POST   | /         | Create employee                               | Admin, HR     |
+| PUT    | /{id:int} | Update employee                               | Admin, HR     |
+| DELETE | /{id:int} | Soft delete employee                          | Admin Only    |
+
+---
+
+# Employee Query Parameters
+
+| Parameter  | Description                                     |
+| ---------- | ----------------------------------------------- |
+| page       | Page number                                     |
+| pageSize   | Number of items per page                        |
+| search     | Search by employee name or email                |
+| department | Filter by department                            |
+| status     | Filter by employment status                     |
+| sortBy     | Sort by email, department, status, or createdAt |
+| sortOrder  | asc or desc                                     |
+
+---
+
+# Employee Create Request Example
+
+```http
+POST /api/v1/employees
+```
+
+```json
+{
+  "fullName": "John Doe",
+  "email": "john@hrms.com",
+  "phone": "01712345678",
+  "department": "HR",
+  "position": "HR Manager",
+  "accountNumber": "123456789",
+  "employmentStatus": "Active"
+}
+```
 
 ---
 
@@ -149,7 +183,7 @@ Protected endpoints require a valid JWT token.
 Example:
 
 ```text
-GET /api/v1/auth/profile
+GET /api/v1/employees
 ```
 
 ---
@@ -165,7 +199,7 @@ Role = Admin
 Example:
 
 ```text
-GET /api/v1/auth/admin-only
+DELETE /api/v1/employees/{id}
 ```
 
 ---

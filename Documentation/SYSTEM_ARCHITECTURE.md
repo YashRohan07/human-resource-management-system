@@ -24,9 +24,7 @@ Repository Layer
 ApplicationDbContext
         ↓
 SQL Server Database
-```
-
-Repository layer implementation will be added in upcoming phases.
+````
 
 ---
 
@@ -38,11 +36,16 @@ Controllers handle incoming HTTP requests and return API responses.
 
 ### Responsibilities
 
-- Receive requests
-- Call service methods
-- Return API responses
+* Receive requests
+* Call service methods
+* Return API responses
 
 Controllers should remain thin and should not contain business logic.
+
+Current implemented controllers:
+
+* AuthController
+* EmployeesController
 
 ---
 
@@ -52,10 +55,15 @@ Services contain application logic and business rules.
 
 ### Responsibilities
 
-- Handle business operations
-- Validate business rules
-- Coordinate repositories
-- Throw custom exceptions when needed
+* Handle business operations
+* Validate business rules
+* Coordinate repositories
+* Throw custom exceptions when needed
+
+Current implemented services:
+
+* AuthService
+* EmployeeService
 
 ---
 
@@ -65,11 +73,15 @@ Repositories handle database-related operations using Entity Framework Core.
 
 ### Responsibilities
 
-- Query data
-- Insert/update/delete records
-- Keep EF Core logic separated from services
+* Query data
+* Insert/update/delete records
+* Keep EF Core logic separated from services
 
 Repositories should not contain business logic.
+
+Current implemented repositories:
+
+* EmployeeRepository
 
 ---
 
@@ -79,11 +91,12 @@ ApplicationDbContext is the main EF Core database context.
 
 ### Responsibilities
 
-- Manage database connection
-- Configure entities and relationships
-- Configure indexes
-- Execute database operations
-- Handle migrations
+* Manage database connection
+* Configure entities and relationships
+* Configure indexes
+* Execute database operations
+* Handle migrations
+* Configure global query filters
 
 ---
 
@@ -91,18 +104,18 @@ ApplicationDbContext is the main EF Core database context.
 
 Current core modules:
 
-- Authentication
-- Employees
-- Salaries
-- Payrolls
+* Authentication
+* Employees
+* Salaries
+* Payrolls
 
 The database uses:
 
-- Entity Framework Core
-- SQL Server
-- Fluent API configurations
-- Migrations
-- Stored Procedures
+* Entity Framework Core
+* SQL Server
+* Fluent API configurations
+* Migrations
+* Stored Procedures
 
 ---
 
@@ -114,9 +127,9 @@ Contains shared fields used by multiple entities.
 
 ### Common Fields
 
-- Id
-- CreatedAt
-- UpdatedAt
+* Id
+* CreatedAt
+* UpdatedAt
 
 ---
 
@@ -131,6 +144,8 @@ IsDeleted
 ```
 
 Employees use soft delete to preserve payroll history.
+
+Soft deleted employees are automatically filtered using EF Core global query filters.
 
 ---
 
@@ -194,9 +209,9 @@ Used for payroll reporting and summary generation.
 
 Returns:
 
-- Department
-- TotalEmployees
-- TotalSalary
+* Department
+* TotalEmployees
+* TotalSalary
 
 ---
 
@@ -220,9 +235,9 @@ Contains application-wide services, guards, and interceptors.
 
 Examples:
 
-- auth.interceptor.ts
-- error.interceptor.ts
-- auth.guard.ts
+* auth.interceptor.ts
+* error.interceptor.ts
+* auth.guard.ts
 
 ---
 
@@ -232,9 +247,9 @@ Contains reusable components, utilities, and interfaces.
 
 Examples:
 
-- shared models
-- reusable UI components
-- loading spinner
+* shared models
+* reusable UI components
+* loading spinner
 
 ---
 
@@ -244,10 +259,10 @@ Contains feature-specific modules and screens.
 
 Examples:
 
-- employees
-- salaries
-- payrolls
-- dashboard
+* employees
+* salaries
+* payrolls
+* dashboard
 
 ---
 
@@ -297,24 +312,38 @@ Error example:
 
 ---
 
+# Employee Module Features
+
+Current employee module supports:
+
+* Employee CRUD operations
+* Pagination
+* Search by name or email
+* Department filtering
+* Employment status filtering
+* Sorting
+* Soft delete
+
+---
+
 # Global Exception Handling
 
 Global exception handling is managed through `ExceptionMiddleware`.
 
 ### Responsibilities
 
-- Catch unhandled exceptions
-- Return consistent error responses
-- Convert exceptions into proper HTTP status codes
+* Catch unhandled exceptions
+* Return consistent error responses
+* Convert exceptions into proper HTTP status codes
 
 Examples:
 
-- 400 Bad Request
-- 401 Unauthorized
-- 403 Forbidden
-- 404 Not Found
-- 409 Conflict
-- 500 Internal Server Error
+* 400 Bad Request
+* 401 Unauthorized
+* 403 Forbidden
+* 404 Not Found
+* 409 Conflict
+* 500 Internal Server Error
 
 ---
 
@@ -356,9 +385,9 @@ Admin-only endpoints use:
 
 JWT tokens currently store:
 
-- User Id
-- Email
-- Role
+* User Id
+* Email
+* Role
 
 This allows the API to identify users and control role-based access without server-side sessions.
 
@@ -366,13 +395,13 @@ This allows the API to identify users and control role-based access without serv
 
 ## Current Security Features
 
-- BCrypt password hashing
-- JWT token generation
-- Role-based authorization
-- Protected endpoints
-- Admin-only endpoints
-- 401 Unauthorized handling
-- 403 Forbidden handling
+* BCrypt password hashing
+* JWT token generation
+* Role-based authorization
+* Protected endpoints
+* Admin-only endpoints
+* 401 Unauthorized handling
+* 403 Forbidden handling
 
 ---
 
@@ -382,9 +411,9 @@ Entity Framework Core migrations are used to manage database schema changes.
 
 Benefits:
 
-- Keep database schema consistent
-- Track schema updates
-- Easier setup for development
+* Keep database schema consistent
+* Track schema updates
+* Easier setup for development
 
 ---
 
@@ -419,3 +448,4 @@ Controllers
 ```
 
 This setup keeps request handling centralized and easier to maintain.
+

@@ -43,6 +43,11 @@ The project is being developed phase-by-phase with a focus on layered architectu
 - Role-based authorization
 - Protected route testing
 - Admin-only endpoint testing
+- Employee CRUD operations
+- Employee search and filtering
+- Employee pagination support
+- Employee sorting support
+- Employee soft delete support
 
 ---
 
@@ -55,13 +60,13 @@ HRMS/
 ├── hrms-client/
 ├── Documentation/
 └── README.md
-```
+````
 
 ---
 
 # Backend Architecture
 
-The backend follows a simple layered architecture approach.
+The backend follows a layered architecture approach.
 
 ```text
 Controller
@@ -75,7 +80,12 @@ ApplicationDbContext
 SQL Server
 ```
 
-Repository layer implementation will be added in upcoming phases.
+Current implemented layers:
+
+* Controllers
+* Services
+* Repositories
+* EF Core DbContext
 
 ---
 
@@ -83,10 +93,10 @@ Repository layer implementation will be added in upcoming phases.
 
 Current core modules:
 
-- Authentication
-- Employees
-- Salaries
-- Payrolls
+* Authentication
+* Employees
+* Salaries
+* Payrolls
 
 Main relationships:
 
@@ -95,18 +105,36 @@ Employee → Salary = One-to-Zero-or-One
 Employee → Payroll = One-to-Many
 ```
 
+Employees support soft delete functionality using global query filters.
+
 ---
 
 # Security
 
 Current security features:
 
-- BCrypt password hashing
-- JWT Authentication
-- Role-based Authorization
-- Seed Admin and HR users
-- Protected API endpoints
-- Admin-only endpoint support
+* BCrypt password hashing
+* JWT Authentication
+* Role-based Authorization
+* Seed Admin and HR users
+* Protected API endpoints
+* Admin-only endpoint support
+
+---
+
+# Employee Module Features
+
+Current employee module supports:
+
+* Create employee
+* Update employee
+* Soft delete employee
+* Get employee by id
+* Employee list pagination
+* Search by employee name or email
+* Department filtering
+* Employment status filtering
+* Sorting support
 
 ---
 
@@ -124,9 +152,9 @@ Used for payroll summary reporting.
 
 Project documentation is available inside the `Documentation` folder.
 
-- SYSTEM_ARCHITECTURE.md
-- DATABASE_SCHEMA.md
-- API_ENDPOINTS.md
+* SYSTEM_ARCHITECTURE.md
+* DATABASE_SCHEMA.md
+* API_ENDPOINTS.md
 
 ---
 
@@ -171,4 +199,22 @@ Frontend runs on:
 
 ```text
 http://localhost:4200
+```
+
+---
+
+# Default Login Credentials
+
+## Admin
+
+```text
+Email: admin@hrms.com
+Password: Admin123!
+```
+
+## HR
+
+```text
+Email: hr@hrms.com
+Password: Hr123!
 ```
