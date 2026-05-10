@@ -1,4 +1,5 @@
 using System.Text;
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using HRMS.API.Data;
 using HRMS.API.Middleware;
@@ -22,6 +23,7 @@ builder.Services.AddSwaggerGen();
 
 // FluentValidation
 builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 // Database context
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -48,10 +50,12 @@ builder.Services.AddScoped<PasswordHasher>();
 
 // Register repositories
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<ISalaryRepository, SalaryRepository>();
 
 // Register application services
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<ISalaryService, SalaryService>();
 
 // JWT authentication setup
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
