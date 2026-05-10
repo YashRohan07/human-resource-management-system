@@ -2,6 +2,8 @@ using System.Text;
 using FluentValidation.AspNetCore;
 using HRMS.API.Data;
 using HRMS.API.Middleware;
+using HRMS.API.Repositories;
+using HRMS.API.Repositories.Interfaces;
 using HRMS.API.Security;
 using HRMS.API.Services;
 using HRMS.API.Services.Interfaces;
@@ -44,8 +46,12 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<JwtHelper>();
 builder.Services.AddScoped<PasswordHasher>();
 
+// Register repositories
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+
 // Register application services
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
 // JWT authentication setup
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
