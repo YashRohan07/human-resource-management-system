@@ -48,6 +48,10 @@ The project is being developed phase-by-phase with a focus on layered architectu
 - Employee pagination support
 - Employee sorting support
 - Employee soft delete support
+- Salary create endpoint
+- Salary update endpoint
+- Get employee salary endpoint
+- Salary validation support
 
 ---
 
@@ -135,6 +139,18 @@ Current employee module supports:
 * Department filtering
 * Employment status filtering
 * Sorting support
+
+---
+
+# Salary Module Features
+
+Current salary module supports:
+
+* Create employee salary
+* Update employee salary
+* Get employee salary details
+* Salary validation rules
+* Duplicate salary prevention
 
 ---
 

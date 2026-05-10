@@ -10,7 +10,7 @@ The database is managed using Entity Framework Core migrations with SQL Server.
 
 ```text
 HRMSDb
-````
+```
 
 ---
 
@@ -61,6 +61,8 @@ Employee records support soft delete functionality.
 ## Salaries
 
 Stores current employee salary information.
+
+Each employee can have only one current salary record.
 
 ### Columns
 
@@ -169,6 +171,18 @@ Prevents duplicate employee emails.
 
 ---
 
+## Salaries
+
+### Unique Employee Salary Index
+
+```text
+IX_Salaries_EmployeeId
+```
+
+Prevents multiple current salary records for the same employee.
+
+---
+
 ## Payrolls
 
 ### Unique Payroll Index
@@ -214,9 +228,9 @@ Returns department-wise payroll summary.
 
 Default users are added automatically during application startup if the database is empty.
 
-| Role  | Email                                   |
-| ----- | --------------------------------------- |
-| Admin | [admin@hrms.com](mailto:admin@hrms.com) |
-| HR    | [hr@hrms.com](mailto:hr@hrms.com)       |
+| Role  | Email         |
+| ----- | ------------- |
+| Admin | admin@hrms.com |
+| HR    | hr@hrms.com |
 
 Passwords are stored using BCrypt hashing.

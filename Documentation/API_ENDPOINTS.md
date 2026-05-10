@@ -6,7 +6,7 @@ Base URL:
 
 ```text
 /api/v1
-````
+```
 
 ---
 
@@ -18,11 +18,11 @@ Base Route:
 /api/v1/auth
 ```
 
-| Method | Endpoint    | Description                | Authorization  |
-| ------ | ----------- | -------------------------- | -------------- |
-| POST   | /login      | Login and return JWT token | Public         |
-| GET    | /profile    | Test protected user access | Logged-in User |
-| GET    | /admin-only | Test admin-only access     | Admin Only     |
+| Method | Endpoint      | Description                | Authorization  |
+| ------ | ------------- | -------------------------- | -------------- |
+| POST   | /login        | Login and return JWT token | Public         |
+| GET    | /profile      | Test protected user access | Logged-in User |
+| GET    | /admin-only   | Test admin-only access     | Admin Only     |
 
 ---
 
@@ -122,11 +122,58 @@ Base Route:
 /api/v1/salaries
 ```
 
-| Method | Endpoint                   | Description         | Authorization |
-| ------ | -------------------------- | ------------------- | ------------- |
-| GET    | /employee/{employeeId:int} | Get employee salary | Planned       |
-| POST   | /                          | Create salary       | Planned       |
-| PUT    | /{id:int}                  | Update salary       | Planned       |
+| Method | Endpoint                   | Description                | Authorization |
+| ------ | -------------------------- | -------------------------- | ------------- |
+| GET    | /employee/{employeeId:int} | Get employee salary        | Admin, HR     |
+| POST   | /                          | Create employee salary     | Admin, HR     |
+| PUT    | /{id:int}                  | Update employee salary     | Admin, HR     |
+
+---
+
+# Salary Create Request Example
+
+```http
+POST /api/v1/salaries
+```
+
+```json
+{
+  "employeeId": 2,
+  "basicSalary": 50000,
+  "bonus": 5000,
+  "deduction": 1000,
+  "effectiveFrom": "2026-05-11"
+}
+```
+
+---
+
+# Salary Update Request Example
+
+```http
+PUT /api/v1/salaries/1
+```
+
+```json
+{
+  "basicSalary": 60000,
+  "bonus": 7000,
+  "deduction": 1500,
+  "effectiveFrom": "2026-05-11"
+}
+```
+
+---
+
+# Salary Validation Rules
+
+| Field         | Validation Rule                  |
+| ------------- | -------------------------------- |
+| employeeId    | Employee must exist              |
+| basicSalary   | Must be greater than 0           |
+| bonus         | Cannot be negative               |
+| deduction     | Cannot be negative               |
+| effectiveFrom | Required                         |
 
 ---
 
@@ -206,8 +253,7 @@ DELETE /api/v1/employees/{id}
 
 # Default Seed Users
 
-| Role  | Email                                   |
-| ----- | --------------------------------------- |
-| Admin | [admin@hrms.com](mailto:admin@hrms.com) |
-| HR    | [hr@hrms.com](mailto:hr@hrms.com)       |
-
+| Role  | Email         |
+| ----- | ------------- |
+| Admin | admin@hrms.com |
+| HR    | hr@hrms.com |

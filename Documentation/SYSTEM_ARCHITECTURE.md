@@ -24,7 +24,7 @@ Repository Layer
 ApplicationDbContext
         ↓
 SQL Server Database
-````
+```
 
 ---
 
@@ -46,6 +46,7 @@ Current implemented controllers:
 
 * AuthController
 * EmployeesController
+* SalariesController
 
 ---
 
@@ -64,6 +65,7 @@ Current implemented services:
 
 * AuthService
 * EmployeeService
+* SalaryService
 
 ---
 
@@ -82,6 +84,7 @@ Repositories should not contain business logic.
 Current implemented repositories:
 
 * EmployeeRepository
+* SalaryRepository
 
 ---
 
@@ -159,6 +162,8 @@ One-to-One
 
 Each employee can have zero or one current salary configuration.
 
+Salary records are updated directly without creating salary history rows.
+
 ---
 
 ## Employee → Payroll
@@ -184,6 +189,8 @@ DeductionSnapshot
 ```
 
 This prevents old payroll history from changing if salary values are updated later.
+
+Salary updates affect only future payroll generation.
 
 ---
 
@@ -278,6 +285,7 @@ Example:
 
 ```text
 /api/v1/employees
+/api/v1/salaries
 /api/v1/payrolls
 /api/v1/dashboard
 ```
@@ -323,6 +331,18 @@ Current employee module supports:
 * Employment status filtering
 * Sorting
 * Soft delete
+
+---
+
+# Salary Module Features
+
+Current salary module supports:
+
+* Create employee salary
+* Update employee salary
+* Get employee salary
+* Salary validation rules
+* Duplicate salary prevention
 
 ---
 
@@ -448,4 +468,3 @@ Controllers
 ```
 
 This setup keeps request handling centralized and easier to maintain.
-
