@@ -180,7 +180,26 @@ public class PayrollService : IPayrollService
         int month,
         int year)
     {
+        ValidateMonthAndYear(month, year);
+
         return await _payrollRepository.GetSummaryAsync(month, year);
+    }
+
+    private static void ValidateMonthAndYear(int month, int year)
+    {
+        if (month < 1 || month > 12)
+        {
+            throw new AppException(
+                "Month must be between 1 and 12.",
+                StatusCodes.Status400BadRequest);
+        }
+
+        if (year <= 2000)
+        {
+            throw new AppException(
+                "Year must be greater than 2000.",
+                StatusCodes.Status400BadRequest);
+        }
     }
 
     private static void ValidateFutureMonth(int month, int year)

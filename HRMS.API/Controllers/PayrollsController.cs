@@ -1,4 +1,5 @@
 using HRMS.API.Common;
+using HRMS.API.Data.QueryModels;
 using HRMS.API.DTOs.Payrolls;
 using HRMS.API.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -47,6 +48,23 @@ public class PayrollsController : ControllerBase
         {
             Success = true,
             Message = "Payrolls fetched successfully.",
+            Data = result
+        });
+    }
+
+    // Get department-wise payroll summary
+    [Authorize(Roles = "Admin,HR")]
+    [HttpGet("summary")]
+    public async Task<IActionResult> GetSummary(
+        [FromQuery] int month,
+        [FromQuery] int year)
+    {
+        var result = await _payrollService.GetSummaryAsync(month, year);
+
+        return Ok(new ApiResponse<IEnumerable<PayrollSummaryResult>>
+        {
+            Success = true,
+            Message = "Payroll summary fetched successfully.",
             Data = result
         });
     }
