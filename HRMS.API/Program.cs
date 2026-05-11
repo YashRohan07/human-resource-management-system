@@ -7,6 +7,7 @@ using HRMS.API.Repositories;
 using HRMS.API.Repositories.Interfaces;
 using HRMS.API.Security;
 using HRMS.API.Services;
+using HRMS.API.Services.Calculators;
 using HRMS.API.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -48,14 +49,19 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<JwtHelper>();
 builder.Services.AddScoped<PasswordHasher>();
 
+// Register calculators
+builder.Services.AddScoped<PayrollCalculator>();
+
 // Register repositories
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<ISalaryRepository, SalaryRepository>();
+builder.Services.AddScoped<IPayrollRepository, PayrollRepository>();
 
 // Register application services
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<ISalaryService, SalaryService>();
+builder.Services.AddScoped<IPayrollService, PayrollService>();
 
 // JWT authentication setup
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
