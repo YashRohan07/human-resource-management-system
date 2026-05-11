@@ -52,6 +52,15 @@ The project is being developed phase-by-phase with a focus on layered architectu
 - Salary update endpoint
 - Get employee salary endpoint
 - Salary validation support
+- Payroll generation endpoint
+- Payroll duplicate prevention
+- Payroll pagination support
+- Payroll filtering support
+- Employee payroll history endpoint
+- Payroll summary reporting
+- Dashboard summary endpoint
+- Department-wise employee statistics
+- Department-wise payroll statistics
 
 ---
 
@@ -64,7 +73,7 @@ HRMS/
 ├── hrms-client/
 ├── Documentation/
 └── README.md
-````
+```
 
 ---
 
@@ -86,10 +95,10 @@ SQL Server
 
 Current implemented layers:
 
-* Controllers
-* Services
-* Repositories
-* EF Core DbContext
+- Controllers
+- Services
+- Repositories
+- EF Core DbContext
 
 ---
 
@@ -97,10 +106,11 @@ Current implemented layers:
 
 Current core modules:
 
-* Authentication
-* Employees
-* Salaries
-* Payrolls
+- Authentication
+- Employees
+- Salaries
+- Payrolls
+- Dashboard Reporting
 
 Main relationships:
 
@@ -117,12 +127,12 @@ Employees support soft delete functionality using global query filters.
 
 Current security features:
 
-* BCrypt password hashing
-* JWT Authentication
-* Role-based Authorization
-* Seed Admin and HR users
-* Protected API endpoints
-* Admin-only endpoint support
+- BCrypt password hashing
+- JWT Authentication
+- Role-based Authorization
+- Seed Admin and HR users
+- Protected API endpoints
+- Admin-only endpoint support
 
 ---
 
@@ -130,15 +140,15 @@ Current security features:
 
 Current employee module supports:
 
-* Create employee
-* Update employee
-* Soft delete employee
-* Get employee by id
-* Employee list pagination
-* Search by employee name or email
-* Department filtering
-* Employment status filtering
-* Sorting support
+- Create employee
+- Update employee
+- Soft delete employee
+- Get employee by id
+- Employee list pagination
+- Search by employee name or email
+- Department filtering
+- Employment status filtering
+- Sorting support
 
 ---
 
@@ -146,11 +156,39 @@ Current employee module supports:
 
 Current salary module supports:
 
-* Create employee salary
-* Update employee salary
-* Get employee salary details
-* Salary validation rules
-* Duplicate salary prevention
+- Create employee salary
+- Update employee salary
+- Get employee salary details
+- Salary validation rules
+- Duplicate salary prevention
+
+---
+
+# Payroll Module Features
+
+Current payroll module supports:
+
+- Generate monthly payroll
+- Payroll duplicate prevention
+- Payroll tax calculation
+- Payroll pagination support
+- Payroll filtering by employee
+- Payroll filtering by month and year
+- Get payroll by id
+- Employee payroll history
+- Department payroll summary reporting
+
+---
+
+# Dashboard Module Features
+
+Current dashboard module supports:
+
+- Total employee count
+- Active employee count
+- Current month payroll cost
+- Department-wise employee statistics
+- Department-wise payroll summary
 
 ---
 
@@ -168,9 +206,9 @@ Used for payroll summary reporting.
 
 Project documentation is available inside the `Documentation` folder.
 
-* SYSTEM_ARCHITECTURE.md
-* DATABASE_SCHEMA.md
-* API_ENDPOINTS.md
+- SYSTEM_ARCHITECTURE.md
+- DATABASE_SCHEMA.md
+- API_ENDPOINTS.md
 
 ---
 

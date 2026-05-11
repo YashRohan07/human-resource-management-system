@@ -167,13 +167,13 @@ PUT /api/v1/salaries/1
 
 # Salary Validation Rules
 
-| Field         | Validation Rule                  |
-| ------------- | -------------------------------- |
-| employeeId    | Employee must exist              |
-| basicSalary   | Must be greater than 0           |
-| bonus         | Cannot be negative               |
-| deduction     | Cannot be negative               |
-| effectiveFrom | Required                         |
+| Field         | Validation Rule        |
+| ------------- | ---------------------- |
+| employeeId    | Employee must exist    |
+| basicSalary   | Must be greater than 0 |
+| bonus         | Cannot be negative     |
+| deduction     | Cannot be negative     |
+| effectiveFrom | Required               |
 
 ---
 
@@ -187,11 +187,69 @@ Base Route:
 
 | Method | Endpoint                   | Description                  | Authorization |
 | ------ | -------------------------- | ---------------------------- | ------------- |
-| POST   | /generate                  | Generate monthly payroll     | Planned       |
-| GET    | /                          | Get payroll list             | Planned       |
-| GET    | /{id:int}                  | Get payroll details          | Planned       |
-| GET    | /employee/{employeeId:int} | Get employee payroll history | Planned       |
-| GET    | /summary                   | Get payroll summary          | Planned       |
+| POST   | /generate                  | Generate monthly payroll     | Admin, HR     |
+| GET    | /                          | Get payroll list             | Admin, HR     |
+| GET    | /summary                   | Get payroll summary          | Admin, HR     |
+| GET    | /{id:int}                  | Get payroll details          | Admin, HR     |
+| GET    | /employee/{employeeId:int} | Get employee payroll history | Admin, HR     |
+
+---
+
+# Payroll Generate Request Example
+
+```http
+POST /api/v1/payrolls/generate
+```
+
+```json
+{
+  "month": 5,
+  "year": 2026
+}
+```
+
+---
+
+# Payroll Query Parameters
+
+| Parameter  | Description                          |
+| ---------- | ------------------------------------ |
+| page       | Page number                          |
+| pageSize   | Number of items per page             |
+| employeeId | Filter payroll by employee           |
+| month      | Filter payroll by month              |
+| year       | Filter payroll by year               |
+
+---
+
+# Payroll Generate Success Response
+
+```json
+{
+  "success": true,
+  "message": "Payroll generated successfully.",
+  "data": [],
+  "errors": null
+}
+```
+
+---
+
+# Payroll Validation Rules
+
+| Field | Validation Rule        |
+| ----- | ---------------------- |
+| month | Must be between 1 and 12 |
+| year  | Must be greater than 2000 |
+
+---
+
+# Payroll Business Rules
+
+- Future month payroll generation is blocked
+- Duplicate payroll generation is blocked
+- Employee salary snapshot is stored during payroll generation
+- Payroll tax is calculated automatically
 
 ---
 
@@ -205,7 +263,29 @@ Base Route:
 
 | Method | Endpoint | Description           | Authorization |
 | ------ | -------- | --------------------- | ------------- |
-| GET    | /        | Get dashboard summary | Planned       |
+| GET    | /        | Get dashboard summary | Admin, HR     |
+
+---
+
+# Dashboard Response Data
+
+Dashboard summary includes:
+
+- Total employees
+- Active employees
+- Current month payroll cost
+- Department-wise employee counts
+- Department-wise payroll summaries
+
+---
+
+# Stored Procedure
+
+```text
+sp_GetPayrollSummaryByMonth
+```
+
+Used for payroll summary reporting.
 
 ---
 
@@ -253,7 +333,7 @@ DELETE /api/v1/employees/{id}
 
 # Default Seed Users
 
-| Role  | Email         |
-| ----- | ------------- |
+| Role  | Email          |
+| ------ | -------------- |
 | Admin | admin@hrms.com |
-| HR    | hr@hrms.com |
+| HR    | hr@hrms.com    |

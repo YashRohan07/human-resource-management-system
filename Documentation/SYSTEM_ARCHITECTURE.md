@@ -36,17 +36,19 @@ Controllers handle incoming HTTP requests and return API responses.
 
 ### Responsibilities
 
-* Receive requests
-* Call service methods
-* Return API responses
+- Receive requests
+- Call service methods
+- Return API responses
 
 Controllers should remain thin and should not contain business logic.
 
 Current implemented controllers:
 
-* AuthController
-* EmployeesController
-* SalariesController
+- AuthController
+- EmployeesController
+- SalariesController
+- PayrollsController
+- DashboardController
 
 ---
 
@@ -56,16 +58,18 @@ Services contain application logic and business rules.
 
 ### Responsibilities
 
-* Handle business operations
-* Validate business rules
-* Coordinate repositories
-* Throw custom exceptions when needed
+- Handle business operations
+- Validate business rules
+- Coordinate repositories
+- Throw custom exceptions when needed
 
 Current implemented services:
 
-* AuthService
-* EmployeeService
-* SalaryService
+- AuthService
+- EmployeeService
+- SalaryService
+- PayrollService
+- DashboardService
 
 ---
 
@@ -75,16 +79,17 @@ Repositories handle database-related operations using Entity Framework Core.
 
 ### Responsibilities
 
-* Query data
-* Insert/update/delete records
-* Keep EF Core logic separated from services
+- Query data
+- Insert/update/delete records
+- Keep EF Core logic separated from services
 
 Repositories should not contain business logic.
 
 Current implemented repositories:
 
-* EmployeeRepository
-* SalaryRepository
+- EmployeeRepository
+- SalaryRepository
+- PayrollRepository
 
 ---
 
@@ -94,12 +99,12 @@ ApplicationDbContext is the main EF Core database context.
 
 ### Responsibilities
 
-* Manage database connection
-* Configure entities and relationships
-* Configure indexes
-* Execute database operations
-* Handle migrations
-* Configure global query filters
+- Manage database connection
+- Configure entities and relationships
+- Configure indexes
+- Execute database operations
+- Handle migrations
+- Configure global query filters
 
 ---
 
@@ -107,18 +112,19 @@ ApplicationDbContext is the main EF Core database context.
 
 Current core modules:
 
-* Authentication
-* Employees
-* Salaries
-* Payrolls
+- Authentication
+- Employees
+- Salaries
+- Payrolls
+- Dashboard Reporting
 
 The database uses:
 
-* Entity Framework Core
-* SQL Server
-* Fluent API configurations
-* Migrations
-* Stored Procedures
+- Entity Framework Core
+- SQL Server
+- Fluent API configurations
+- Migrations
+- Stored Procedures
 
 ---
 
@@ -130,9 +136,9 @@ Contains shared fields used by multiple entities.
 
 ### Common Fields
 
-* Id
-* CreatedAt
-* UpdatedAt
+- Id
+- CreatedAt
+- UpdatedAt
 
 ---
 
@@ -174,6 +180,8 @@ One-to-Many
 
 Each employee can have multiple payroll records over time.
 
+Payroll history remains preserved permanently.
+
 ---
 
 # Payroll Snapshot Design
@@ -191,6 +199,46 @@ DeductionSnapshot
 This prevents old payroll history from changing if salary values are updated later.
 
 Salary updates affect only future payroll generation.
+
+---
+
+# Payroll Generation Flow
+
+Payroll generation follows this flow:
+
+```text
+Get active employees
+        ↓
+Load employee salaries
+        ↓
+Validate duplicate payroll
+        ↓
+Calculate gross salary
+        ↓
+Calculate tax
+        ↓
+Calculate net salary
+        ↓
+Store payroll snapshot
+        ↓
+Save payroll records using transaction
+```
+
+---
+
+# Payroll Calculator
+
+Payroll calculations are separated into a dedicated calculator service.
+
+Current formula:
+
+```text
+Gross Salary = Basic Salary + Bonus
+
+Tax = Gross Salary × 10%
+
+Net Salary = Gross Salary − Tax − Deduction
+```
 
 ---
 
@@ -216,9 +264,25 @@ Used for payroll reporting and summary generation.
 
 Returns:
 
-* Department
-* TotalEmployees
-* TotalSalary
+- Department
+- TotalEmployees
+- TotalSalary
+
+---
+
+# Dashboard Reporting Architecture
+
+Dashboard reporting uses aggregation queries and stored procedure reporting.
+
+Dashboard summary includes:
+
+- Total employees
+- Active employees
+- Current month payroll cost
+- Department-wise employee statistics
+- Department-wise payroll summaries
+
+Dashboard queries are handled directly inside `DashboardService` because the reporting logic is lightweight and aggregation-focused.
 
 ---
 
@@ -242,9 +306,9 @@ Contains application-wide services, guards, and interceptors.
 
 Examples:
 
-* auth.interceptor.ts
-* error.interceptor.ts
-* auth.guard.ts
+- auth.interceptor.ts
+- error.interceptor.ts
+- auth.guard.ts
 
 ---
 
@@ -254,9 +318,9 @@ Contains reusable components, utilities, and interfaces.
 
 Examples:
 
-* shared models
-* reusable UI components
-* loading spinner
+- shared models
+- reusable UI components
+- loading spinner
 
 ---
 
@@ -266,10 +330,10 @@ Contains feature-specific modules and screens.
 
 Examples:
 
-* employees
-* salaries
-* payrolls
-* dashboard
+- employees
+- salaries
+- payrolls
+- dashboard
 
 ---
 
@@ -324,13 +388,13 @@ Error example:
 
 Current employee module supports:
 
-* Employee CRUD operations
-* Pagination
-* Search by name or email
-* Department filtering
-* Employment status filtering
-* Sorting
-* Soft delete
+- Employee CRUD operations
+- Pagination
+- Search by name or email
+- Department filtering
+- Employment status filtering
+- Sorting
+- Soft delete
 
 ---
 
@@ -338,11 +402,38 @@ Current employee module supports:
 
 Current salary module supports:
 
-* Create employee salary
-* Update employee salary
-* Get employee salary
-* Salary validation rules
-* Duplicate salary prevention
+- Create employee salary
+- Update employee salary
+- Get employee salary
+- Salary validation rules
+- Duplicate salary prevention
+
+---
+
+# Payroll Module Features
+
+Current payroll module supports:
+
+- Monthly payroll generation
+- Payroll duplicate prevention
+- Payroll transaction handling
+- Payroll pagination
+- Payroll filtering
+- Employee payroll history
+- Payroll summary reporting
+- Automatic payroll tax calculation
+
+---
+
+# Dashboard Module Features
+
+Current dashboard module supports:
+
+- Total employee count
+- Active employee count
+- Current month payroll cost
+- Department-wise employee statistics
+- Department-wise payroll summary reporting
 
 ---
 
@@ -352,18 +443,18 @@ Global exception handling is managed through `ExceptionMiddleware`.
 
 ### Responsibilities
 
-* Catch unhandled exceptions
-* Return consistent error responses
-* Convert exceptions into proper HTTP status codes
+- Catch unhandled exceptions
+- Return consistent error responses
+- Convert exceptions into proper HTTP status codes
 
 Examples:
 
-* 400 Bad Request
-* 401 Unauthorized
-* 403 Forbidden
-* 404 Not Found
-* 409 Conflict
-* 500 Internal Server Error
+- 400 Bad Request
+- 401 Unauthorized
+- 403 Forbidden
+- 404 Not Found
+- 409 Conflict
+- 500 Internal Server Error
 
 ---
 
@@ -405,9 +496,9 @@ Admin-only endpoints use:
 
 JWT tokens currently store:
 
-* User Id
-* Email
-* Role
+- User Id
+- Email
+- Role
 
 This allows the API to identify users and control role-based access without server-side sessions.
 
@@ -415,13 +506,13 @@ This allows the API to identify users and control role-based access without serv
 
 ## Current Security Features
 
-* BCrypt password hashing
-* JWT token generation
-* Role-based authorization
-* Protected endpoints
-* Admin-only endpoints
-* 401 Unauthorized handling
-* 403 Forbidden handling
+- BCrypt password hashing
+- JWT token generation
+- Role-based authorization
+- Protected endpoints
+- Admin-only endpoints
+- 401 Unauthorized handling
+- 403 Forbidden handling
 
 ---
 
@@ -431,9 +522,9 @@ Entity Framework Core migrations are used to manage database schema changes.
 
 Benefits:
 
-* Keep database schema consistent
-* Track schema updates
-* Easier setup for development
+- Keep database schema consistent
+- Track schema updates
+- Easier setup for development
 
 ---
 

@@ -83,7 +83,7 @@ Each employee can have only one current salary record.
 
 Stores monthly payroll history.
 
-Payroll values are stored as snapshots so old payroll records remain unchanged even if salary changes later.
+Payroll values are stored as snapshots so payroll history remains unchanged even if salary information changes later.
 
 ### Columns
 
@@ -127,6 +127,8 @@ One-to-Many
 
 One employee can have many payroll records.
 
+Payroll records are preserved permanently for payroll history tracking.
+
 ---
 
 # Soft Delete
@@ -142,6 +144,37 @@ IsDeleted = true
 Employee queries use a global query filter so soft deleted employees are automatically excluded from normal API responses.
 
 This helps preserve payroll history and related records.
+
+---
+
+# Payroll Business Rules
+
+Current payroll generation rules:
+
+- Payroll is generated only for active employees
+- Employees without salary records are skipped
+- Duplicate payroll generation is blocked
+- Future month payroll generation is blocked
+- Payroll generation uses database transactions
+- Payroll salary values are stored as snapshots
+
+---
+
+# Dashboard Reporting
+
+Dashboard summary data is generated using:
+
+- Employee aggregation queries
+- Payroll aggregation queries
+- Stored procedure reporting
+
+Dashboard reporting includes:
+
+- Total employees
+- Active employees
+- Current month payroll cost
+- Department-wise employee statistics
+- Department-wise payroll summaries
 
 ---
 
@@ -207,7 +240,7 @@ Improves payroll filtering performance.
 
 ## sp_GetPayrollSummaryByMonth
 
-Returns department-wise payroll summary.
+Returns department-wise payroll summary data.
 
 ### Parameters
 
@@ -218,9 +251,9 @@ Returns department-wise payroll summary.
 
 ### Returns
 
-* Department
-* TotalEmployees
-* TotalSalary
+- Department
+- TotalEmployees
+- TotalSalary
 
 ---
 
@@ -228,9 +261,9 @@ Returns department-wise payroll summary.
 
 Default users are added automatically during application startup if the database is empty.
 
-| Role  | Email         |
-| ----- | ------------- |
+| Role  | Email          |
+| ------ | -------------- |
 | Admin | admin@hrms.com |
-| HR    | hr@hrms.com |
+| HR    | hr@hrms.com    |
 
 Passwords are stored using BCrypt hashing.
