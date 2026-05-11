@@ -1,5 +1,6 @@
 namespace HRMS.API.DTOs.Employees;
 
+// Request model for creating employee
 public class EmployeeCreateDto
 {
     public string FullName { get; set; } = string.Empty;
