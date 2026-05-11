@@ -34,4 +34,50 @@ public class PayrollsController : ControllerBase
                 Data = result
             });
     }
+
+    // Get payroll list with pagination and filters
+    [Authorize(Roles = "Admin,HR")]
+    [HttpGet]
+    public async Task<IActionResult> GetAll(
+        [FromQuery] PayrollQueryDto query)
+    {
+        var result = await _payrollService.GetAllAsync(query);
+
+        return Ok(new ApiResponse<PagedResult<PayrollResponseDto>>
+        {
+            Success = true,
+            Message = "Payrolls fetched successfully.",
+            Data = result
+        });
+    }
+
+    // Get payroll history for one employee
+    [Authorize(Roles = "Admin,HR")]
+    [HttpGet("employee/{employeeId:int}")]
+    public async Task<IActionResult> GetByEmployeeId(int employeeId)
+    {
+        var result = await _payrollService.GetByEmployeeIdAsync(employeeId);
+
+        return Ok(new ApiResponse<IEnumerable<PayrollResponseDto>>
+        {
+            Success = true,
+            Message = "Employee payrolls fetched successfully.",
+            Data = result
+        });
+    }
+
+    // Get payroll by id
+    [Authorize(Roles = "Admin,HR")]
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        var result = await _payrollService.GetByIdAsync(id);
+
+        return Ok(new ApiResponse<PayrollResponseDto>
+        {
+            Success = true,
+            Message = "Payroll fetched successfully.",
+            Data = result
+        });
+    }
 }
