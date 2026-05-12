@@ -1,14 +1,19 @@
 <div class="dialog-backdrop">
   <div class="dialog-box">
     <h3>{{ title }}</h3>
+
     <p>{{ message }}</p>
 
     <div class="dialog-actions">
-      <button type="button" class="secondary" (click)="cancel()">
+      <button type="button"
+              class="btn btn-secondary"
+              (click)="cancel()">
         Cancel
       </button>
 
-      <button type="button" class="danger" (click)="confirm()">
+      <button type="button"
+              class="btn btn-danger"
+              (click)="confirm()">
         Confirm
       </button>
     </div>

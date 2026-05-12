@@ -56,11 +56,11 @@ export class PayrollListComponent implements OnInit {
 
     this.payrollService.getAll(query).subscribe({
       next: result => {
-        const data = result as any;
-
-        this.payrolls = data.items || data.data || [];
-        this.totalCount = data.totalCount || data.totalItems || this.payrolls.length;
-        this.totalPages = data.totalPages || Math.ceil(this.totalCount / this.pageSize) || 1;
+        this.payrolls = result.items || [];
+        this.totalCount = result.meta?.totalCount || 0;
+        this.totalPages = result.meta?.totalPages || 1;
+        this.page = result.meta?.currentPage || this.page;
+        this.pageSize = result.meta?.pageSize || this.pageSize;
 
         this.isLoading = false;
       },

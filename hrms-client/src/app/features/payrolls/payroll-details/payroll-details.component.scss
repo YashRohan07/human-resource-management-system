@@ -14,16 +14,9 @@ p {
   color: #666666;
 }
 
-a {
-  color: #222222;
-}
-
 .details-card {
   max-width: 750px;
   padding: 20px;
-  background: #ffffff;
-  border: 1px solid #dddddd;
-  border-radius: 8px;
 }
 
 h2 {
@@ -41,14 +34,3 @@ h2 {
   .details-row span {
     color: #666666;
   }
-
-.message {
-  padding: 16px;
-  text-align: center;
-  color: #666666;
-}
-
-.error-message {
-  padding: 12px;
-  color: #c0392b;
-}

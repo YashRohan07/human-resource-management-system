@@ -4,7 +4,7 @@
     <p>View employee information and current salary.</p>
   </div>
 
-  <a routerLink="/employees">
+  <a routerLink="/employees" class="btn btn-secondary">
     Back to List
   </a>
 </section>
@@ -58,7 +58,8 @@
     </div>
 
     <div class="card-actions">
-      <a [routerLink]="['/employees', employee.id, 'edit']">
+      <a class="btn btn-secondary"
+         [routerLink]="['/employees', employee.id, 'edit']">
         Edit Employee
       </a>
     </div>
@@ -94,15 +95,19 @@
     </ng-template>
 
     <div class="card-actions">
-      <a [routerLink]="['/employees', employee.id, 'salary']">
+      <a class="btn btn-secondary"
+         [routerLink]="['/employees', employee.id, 'salary']">
         View Salary
       </a>
 
-      <a [routerLink]="['/employees', employee.id, 'salary', 'edit']">
+      <a class="btn btn-primary"
+         [routerLink]="['/employees', employee.id, 'salary', 'edit']">
         {{ salary ? 'Update Salary' : 'Create Salary' }}
       </a>
 
-      <a [routerLink]="['/payrolls']" [queryParams]="{ employeeId: employee.id }">
+      <a class="btn btn-secondary"
+         [routerLink]="['/payrolls']"
+         [queryParams]="{ employeeId: employee.id }">
         Payroll History
       </a>
     </div>

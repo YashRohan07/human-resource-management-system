@@ -14,33 +14,10 @@ p {
   color: #666666;
 }
 
-.primary-link,
-button {
-  padding: 9px 14px;
-  border: none;
-  border-radius: 4px;
-  background: #222222;
-  color: #ffffff;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-  button:disabled {
-    background: #999999;
-    cursor: not-allowed;
-  }
-
-.secondary {
-  background: #777777;
-}
-
 .filter-card,
 .table-card {
   padding: 18px;
   margin-bottom: 20px;
-  background: #ffffff;
-  border: 1px solid #dddddd;
-  border-radius: 8px;
 }
 
 .filter-card {
@@ -70,44 +47,16 @@ select {
   gap: 8px;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th,
-td {
-  padding: 12px;
-  border-bottom: 1px solid #eeeeee;
-  text-align: left;
-}
-
-th {
-  background: #f5f5f5;
-}
-
 .actions-column {
-  width: 190px;
+  width: 250px;
 }
 
 .actions {
   display: flex;
-  gap: 10px;
+  gap: 6px;
   align-items: center;
-}
-
-  .actions a,
-  .danger-link {
-    padding: 0;
-    border: none;
-    background: transparent;
-    color: #222222;
-    text-decoration: underline;
-    cursor: pointer;
-  }
-
-.danger-link {
-  color: #c0392b;
+  justify-content: center;
+  flex-wrap: nowrap;
 }
 
 .message,
@@ -117,23 +66,21 @@ th {
   color: #666666;
 }
 
-.error-message {
-  padding: 12px;
-  color: #c0392b;
-}
-
-.success-message {
-  padding: 12px;
-  margin-bottom: 12px;
-  background: #eafaf1;
-  color: #1e8449;
-  border-radius: 4px;
-}
-
 .pagination {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 12px;
   margin-top: 16px;
+}
+
+th:nth-child(3),
+th:nth-child(4),
+th:nth-child(5),
+th:nth-child(6),
+td:nth-child(3),
+td:nth-child(4),
+td:nth-child(5),
+td:nth-child(6) {
+  text-align: center;
 }

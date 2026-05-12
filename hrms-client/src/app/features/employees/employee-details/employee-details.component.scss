@@ -14,10 +14,6 @@ p {
   color: #666666;
 }
 
-a {
-  color: #222222;
-}
-
 .details-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -26,9 +22,6 @@ a {
 
 .details-card {
   padding: 20px;
-  background: #ffffff;
-  border: 1px solid #dddddd;
-  border-radius: 8px;
 }
 
 h2 {
@@ -52,17 +45,6 @@ h2 {
   gap: 12px;
   flex-wrap: wrap;
   margin-top: 18px;
-}
-
-.message {
-  padding: 16px;
-  text-align: center;
-  color: #666666;
-}
-
-.error-message {
-  padding: 12px;
-  color: #c0392b;
 }
 
 .muted {

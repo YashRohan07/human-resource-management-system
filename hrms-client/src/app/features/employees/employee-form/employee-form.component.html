@@ -4,7 +4,7 @@
     <p>{{ isEditMode ? 'Update employee information.' : 'Create a new employee record.' }}</p>
   </div>
 
-  <a routerLink="/employees">
+  <a routerLink="/employees" class="btn btn-secondary">
     Back to List
   </a>
 </section>
@@ -72,7 +72,9 @@
     </div>
 
     <div class="form-actions">
-      <button type="submit" [disabled]="isSaving">
+      <button type="submit"
+              class="btn btn-primary"
+              [disabled]="isSaving">
         {{ isSaving ? 'Saving...' : 'Save Employee' }}
       </button>
     </div>

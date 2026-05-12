@@ -4,7 +4,7 @@
     <p>Select month and year, then generate payroll for active employees.</p>
   </div>
 
-  <a routerLink="/payrolls">
+  <a routerLink="/payrolls" class="btn btn-secondary">
     Back to Payrolls
   </a>
 </section>
@@ -41,7 +41,10 @@
   </div>
 
   <div class="form-actions">
-    <button type="button" (click)="generatePayroll()" [disabled]="isSaving || isFutureMonth()">
+    <button type="button"
+            class="btn btn-primary"
+            (click)="generatePayroll()"
+            [disabled]="isSaving || isFutureMonth()">
       {{ isSaving ? 'Generating...' : 'Generate Payroll' }}
     </button>
   </div>

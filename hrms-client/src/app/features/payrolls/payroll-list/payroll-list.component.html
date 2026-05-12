@@ -4,7 +4,7 @@
     <p>View generated payroll records.</p>
   </div>
 
-  <a routerLink="/payrolls/generate">
+  <a routerLink="/payrolls/generate" class="btn btn-primary">
     Generate Payroll
   </a>
 </section>
@@ -39,11 +39,15 @@
   </div>
 
   <div class="filter-actions">
-    <button type="button" (click)="applyFilters()">
+    <button type="button"
+            class="btn btn-primary"
+            (click)="applyFilters()">
       Apply
     </button>
 
-    <button type="button" class="secondary-button" (click)="clearFilters()">
+    <button type="button"
+            class="btn btn-secondary"
+            (click)="clearFilters()">
       Clear
     </button>
   </div>
@@ -82,7 +86,8 @@
         <td>{{ payroll.tax }}</td>
         <td>{{ payroll.netSalary }}</td>
         <td>
-          <a [routerLink]="['/payrolls', payroll.id]">
+          <a class="action-link"
+             [routerLink]="['/payrolls', payroll.id]">
             Details
           </a>
         </td>
@@ -102,11 +107,17 @@
     </div>
 
     <div class="pagination-actions">
-      <button type="button" (click)="goToPreviousPage()" [disabled]="page <= 1">
+      <button type="button"
+              class="btn btn-secondary"
+              (click)="goToPreviousPage()"
+              [disabled]="page <= 1">
         Previous
       </button>
 
-      <button type="button" (click)="goToNextPage()" [disabled]="page >= totalPages">
+      <button type="button"
+              class="btn btn-primary"
+              (click)="goToNextPage()"
+              [disabled]="page >= totalPages">
         Next
       </button>
 

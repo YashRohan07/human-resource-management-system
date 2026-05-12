@@ -4,7 +4,7 @@
     <p>View, search and manage employee records.</p>
   </div>
 
-  <a routerLink="/employees/new" class="primary-link">
+  <a routerLink="/employees/new" class="btn btn-primary">
     Add Employee
   </a>
 </section>
@@ -48,11 +48,15 @@
   </div>
 
   <div class="filter-actions">
-    <button type="button" (click)="applyFilters()">
+    <button type="button"
+            class="btn btn-primary"
+            (click)="applyFilters()">
       Apply
     </button>
 
-    <button type="button" class="secondary" (click)="clearFilters()">
+    <button type="button"
+            class="btn btn-secondary"
+            (click)="clearFilters()">
       Clear
     </button>
   </div>
@@ -93,17 +97,19 @@
         <td>{{ employee.employmentStatus }}</td>
 
         <td class="actions">
-          <a [routerLink]="['/employees', employee.id]">
+          <a class="action-link"
+             [routerLink]="['/employees', employee.id]">
             View
           </a>
 
-          <a [routerLink]="['/employees', employee.id, 'edit']">
+          <a class="action-link"
+             [routerLink]="['/employees', employee.id, 'edit']">
             Edit
           </a>
 
           <button *ngIf="isAdmin"
                   type="button"
-                  class="danger-link"
+                  class="action-link-danger"
                   (click)="openDeleteDialog(employee)">
             Delete
           </button>
@@ -120,6 +126,7 @@
 
   <div class="pagination" *ngIf="meta">
     <button type="button"
+            class="btn btn-secondary"
             (click)="previousPage()"
             [disabled]="currentPage <= 1">
       Previous
@@ -131,6 +138,7 @@
     </span>
 
     <button type="button"
+            class="btn btn-primary"
             (click)="nextPage()"
             [disabled]="currentPage >= meta.totalPages">
       Next
@@ -142,4 +150,5 @@
                     title="Delete Employee"
                     [message]="'Are you sure you want to delete ' + selectedEmployee?.fullName + '?'"
                     (confirmed)="confirmDelete()"
-                    (cancelled)="closeDeleteDialog()"></app-confirm-dialog>
+                    (cancelled)="closeDeleteDialog()">
+</app-confirm-dialog>

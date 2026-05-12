@@ -1,1 +1,123 @@
-/* You can add global styles to this file, and also import other style files */
+.btn,
+button.btn,
+a.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 10px 16px;
+  border: 1px solid #cccccc;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #222222;
+  font: inherit;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-danger {
+  background: #ffffff;
+  border-color: #cccccc;
+  color: #222222;
+}
+
+  .btn-primary:hover,
+  .btn-secondary:hover,
+  .btn-danger:hover {
+    background: #f5f5f5;
+  }
+
+.btn:disabled,
+button.btn:disabled {
+  background: #eeeeee;
+  border-color: #dddddd;
+  color: #999999;
+  cursor: not-allowed;
+}
+
+.action-link,
+.action-link-danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  padding: 5px 10px;
+  border: 1px solid #cccccc;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #222222;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+  .action-link:hover,
+  .action-link-danger:hover {
+    background: #f5f5f5;
+  }
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #555555 !important;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.08);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  background: #f5f5f5;
+  font-weight: 700;
+}
+
+th,
+td {
+  padding: 12px;
+  border-bottom: 1px solid #eeeeee;
+  text-align: left;
+}
+
+.form-card,
+.table-card,
+.details-card,
+.filter-card {
+  background: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+}
+
+.success-message {
+  padding: 12px;
+  border-radius: 6px;
+  background: #eafaf1;
+  color: #1e8449;
+  margin-bottom: 12px;
+}
+
+.error-message {
+  padding: 12px;
+  border-radius: 6px;
+  background: #fdecea;
+  color: #c0392b;
+  margin-bottom: 12px;
+}
+
+.message {
+  padding: 16px;
+  text-align: center;
+  color: #666666;
+}
