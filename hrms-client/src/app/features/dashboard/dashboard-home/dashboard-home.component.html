@@ -1,2 +1,94 @@
-<h1>Dashboard</h1>
-<p>Dashboard summary will be implemented after authentication flow is ready.</p>
+<section class="page-header">
+  <div>
+    <h1>Dashboard</h1>
+    <p>Quick overview of employees and current month payroll.</p>
+  </div>
+</section>
+
+<div class="message" *ngIf="isLoading">
+  Loading dashboard...
+</div>
+
+<div class="error-message" *ngIf="errorMessage">
+  {{ errorMessage }}
+</div>
+
+<ng-container *ngIf="summary && !isLoading">
+
+  <section class="summary-grid">
+    <div class="summary-card">
+      <span>Total Employees</span>
+      <strong>{{ summary.totalEmployees }}</strong>
+    </div>
+
+    <div class="summary-card">
+      <span>Active Employees</span>
+      <strong>{{ summary.activeEmployees }}</strong>
+    </div>
+
+    <div class="summary-card">
+      <span>Current Month Payroll</span>
+      <strong>{{ summary.currentMonthPayrollCost }}</strong>
+    </div>
+
+    <div class="summary-card">
+      <span>Departments</span>
+      <strong>{{ summary.departmentEmployeeCounts.length }}</strong>
+    </div>
+  </section>
+
+  <section class="table-card">
+    <h2>Department-wise Employee Count</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Department</th>
+          <th>Total Employees</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let item of summary.departmentEmployeeCounts">
+          <td>{{ item.department }}</td>
+          <td>{{ item.totalEmployees }}</td>
+        </tr>
+
+        <tr *ngIf="summary.departmentEmployeeCounts.length === 0">
+          <td colspan="2" class="empty-row">
+            No department data found.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="table-card">
+    <h2>Current Month Payroll Summary</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Department</th>
+          <th>Total Employees</th>
+          <th>Total Salary</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let item of summary.departmentPayrollSummaries">
+          <td>{{ item.department }}</td>
+          <td>{{ item.totalEmployees }}</td>
+          <td>{{ item.totalSalary }}</td>
+        </tr>
+
+        <tr *ngIf="summary.departmentPayrollSummaries.length === 0">
+          <td colspan="3" class="empty-row">
+            No payroll summary found for current month.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+</ng-container>

@@ -9,6 +9,6 @@ export interface DashboardSummary {
   totalEmployees: number;
   activeEmployees: number;
   currentMonthPayrollCost: number;
-  departmentWiseEmployeeCount: DepartmentSummary[];
-  departmentWisePayrollSummary: PayrollSummary[];
+  departmentEmployeeCounts: DepartmentSummary[];
+  departmentPayrollSummaries: PayrollSummary[];
 }
