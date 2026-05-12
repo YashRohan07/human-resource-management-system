@@ -10,6 +10,9 @@ import { EmployeeFormComponent } from './features/employees/employee-form/employ
 import { EmployeeDetailsComponent } from './features/employees/employee-details/employee-details.component';
 import { SalaryDetailsComponent } from './features/salaries/salary-details/salary-details.component';
 import { SalaryFormComponent } from './features/salaries/salary-form/salary-form.component';
+import { PayrollListComponent } from './features/payrolls/payroll-list/payroll-list.component';
+import { GeneratePayrollComponent } from './features/payrolls/generate-payroll/generate-payroll.component';
+import { PayrollDetailsComponent } from './features/payrolls/payroll-details/payroll-details.component';
 import { NotFoundComponent } from './features/not-found/not-found.component';
 
 export const routes: Routes = [
@@ -54,6 +57,18 @@ export const routes: Routes = [
       {
         path: 'employees/:id/edit',
         component: EmployeeFormComponent
+      },
+      {
+        path: 'payrolls',
+        component: PayrollListComponent
+      },
+      {
+        path: 'payrolls/generate',
+        component: GeneratePayrollComponent
+      },
+      {
+        path: 'payrolls/:id',
+        component: PayrollDetailsComponent
       }
     ]
   },

@@ -1,0 +1,76 @@
+<section class="page-header">
+  <div>
+    <h1>Generate Payroll</h1>
+    <p>Select month and year, then generate payroll for active employees.</p>
+  </div>
+
+  <a routerLink="/payrolls">
+    Back to Payrolls
+  </a>
+</section>
+
+<section class="form-card">
+  <div class="form-grid">
+    <div class="form-group">
+      <label for="month">Month</label>
+      <select id="month" [(ngModel)]="month">
+        <option *ngFor="let item of [1,2,3,4,5,6,7,8,9,10,11,12]" [value]="item">
+          {{ getMonthName(item) }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="year">Year</label>
+      <input id="year"
+             type="number"
+             [(ngModel)]="year">
+    </div>
+  </div>
+
+  <div class="error-message" *ngIf="isFutureMonth()">
+    Future month payroll cannot be generated.
+  </div>
+
+  <div class="error-message" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <div class="success-message" *ngIf="successMessage">
+    {{ successMessage }}
+  </div>
+
+  <div class="form-actions">
+    <button type="button" (click)="generatePayroll()" [disabled]="isSaving || isFutureMonth()">
+      {{ isSaving ? 'Generating...' : 'Generate Payroll' }}
+    </button>
+  </div>
+</section>
+
+<section class="table-card" *ngIf="generatedPayrolls.length > 0">
+  <h2>Generated Records</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Employee</th>
+        <th>Month</th>
+        <th>Year</th>
+        <th>Gross</th>
+        <th>Tax</th>
+        <th>Net</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let payroll of generatedPayrolls">
+        <td>{{ payroll.employeeName || ('Employee #' + payroll.employeeId) }}</td>
+        <td>{{ getMonthName(payroll.month) }}</td>
+        <td>{{ payroll.year }}</td>
+        <td>{{ payroll.grossSalary }}</td>
+        <td>{{ payroll.tax }}</td>
+        <td>{{ payroll.netSalary }}</td>
+      </tr>
+    </tbody>
+  </table>
+</section>

@@ -1,0 +1,67 @@
+<section class="page-header">
+  <div>
+    <h1>Payroll Details</h1>
+    <p>View generated salary snapshot and calculated amounts.</p>
+  </div>
+
+  <a routerLink="/payrolls">
+    Back to Payrolls
+  </a>
+</section>
+
+<div class="message" *ngIf="isLoading">
+  Loading payroll...
+</div>
+
+<div class="error-message" *ngIf="errorMessage">
+  {{ errorMessage }}
+</div>
+
+<section class="details-card" *ngIf="payroll && !isLoading">
+  <h2>{{ payroll.employeeName || ('Employee #' + payroll.employeeId) }}</h2>
+
+  <div class="details-row">
+    <span>Month</span>
+    <strong>{{ getMonthName(payroll.month) }}</strong>
+  </div>
+
+  <div class="details-row">
+    <span>Year</span>
+    <strong>{{ payroll.year }}</strong>
+  </div>
+
+  <div class="details-row">
+    <span>Basic Salary Snapshot</span>
+    <strong>{{ payroll.basicSalarySnapshot }}</strong>
+  </div>
+
+  <div class="details-row">
+    <span>Bonus Snapshot</span>
+    <strong>{{ payroll.bonusSnapshot }}</strong>
+  </div>
+
+  <div class="details-row">
+    <span>Deduction Snapshot</span>
+    <strong>{{ payroll.deductionSnapshot }}</strong>
+  </div>
+
+  <div class="details-row">
+    <span>Gross Salary</span>
+    <strong>{{ payroll.grossSalary }}</strong>
+  </div>
+
+  <div class="details-row">
+    <span>Tax</span>
+    <strong>{{ payroll.tax }}</strong>
+  </div>
+
+  <div class="details-row">
+    <span>Net Salary</span>
+    <strong>{{ payroll.netSalary }}</strong>
+  </div>
+
+  <div class="details-row">
+    <span>Generated At</span>
+    <strong>{{ payroll.generatedAt | date:'medium' }}</strong>
+  </div>
+</section>
