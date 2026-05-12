@@ -18,14 +18,10 @@ a {
   color: #222222;
 }
 
-.details-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-}
-
 .details-card {
+  max-width: 700px;
   padding: 20px;
+  margin-bottom: 20px;
   background: #ffffff;
   border: 1px solid #dddddd;
   border-radius: 8px;
@@ -48,9 +44,6 @@ h2 {
   }
 
 .card-actions {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
   margin-top: 18px;
 }
 

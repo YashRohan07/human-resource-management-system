@@ -8,16 +8,17 @@ import { Employee } from '../../../shared/interfaces/employee.interface';
 import { Salary } from '../../../shared/interfaces/salary.interface';
 
 @Component({
-  selector: 'app-employee-details',
+  selector: 'app-salary-details',
   imports: [CommonModule, RouterLink],
-  templateUrl: './employee-details.component.html',
-  styleUrl: './employee-details.component.scss'
+  templateUrl: './salary-details.component.html',
+  styleUrl: './salary-details.component.scss'
 })
-export class EmployeeDetailsComponent implements OnInit {
+export class SalaryDetailsComponent implements OnInit {
 
   employee: Employee | null = null;
   salary: Salary | null = null;
 
+  employeeId = 0;
   isLoading = false;
   errorMessage = '';
   salaryMessage = '';
@@ -29,31 +30,31 @@ export class EmployeeDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
+    this.employeeId = Number(this.route.snapshot.paramMap.get('id'));
 
-    this.loadEmployee(id);
-    this.loadSalary(id);
+    this.loadEmployee();
+    this.loadSalary();
   }
 
-  loadEmployee(id: number): void {
+  loadEmployee(): void {
     this.isLoading = true;
 
-    this.employeeService.getById(id).subscribe({
+    this.employeeService.getById(this.employeeId).subscribe({
       next: employee => {
         this.employee = employee;
         this.isLoading = false;
       },
       error: error => {
         this.errorMessage =
-          error?.error?.message || 'Failed to load employee details.';
+          error?.error?.message || 'Failed to load employee.';
         this.isLoading = false;
       }
     });
   }
 
-  // Salary is optional, so a failed salary request should not block the page.
-  loadSalary(employeeId: number): void {
-    this.salaryService.getByEmployeeId(employeeId).subscribe({
+  // A missing salary is normal for a newly added employee.
+  loadSalary(): void {
+    this.salaryService.getByEmployeeId(this.employeeId).subscribe({
       next: salary => {
         this.salary = salary;
       },

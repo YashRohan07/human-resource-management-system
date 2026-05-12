@@ -1,0 +1,86 @@
+<section class="page-header">
+  <div>
+    <h1>{{ isEditMode ? 'Update Salary' : 'Create Salary' }}</h1>
+    <p>Set the current salary for this employee.</p>
+  </div>
+
+  <a [routerLink]="['/employees', employeeId, 'salary']">
+    Back to Salary
+  </a>
+</section>
+
+<div class="message" *ngIf="isLoading">
+  Loading salary...
+</div>
+
+<div class="error-message" *ngIf="errorMessage">
+  {{ errorMessage }}
+</div>
+
+<section class="form-card" *ngIf="!isLoading">
+  <div class="employee-summary" *ngIf="employee">
+    <strong>{{ employee.fullName }}</strong>
+    <span>{{ employee.department }} - {{ employee.position }}</span>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="save()">
+
+    <div class="form-group">
+      <label for="basicSalary">Basic Salary</label>
+      <input id="basicSalary"
+             type="number"
+             formControlName="basicSalary"
+             min="0.01">
+
+      <small *ngIf="form.controls.basicSalary.touched && form.controls.basicSalary.invalid">
+        Basic salary must be greater than 0.
+      </small>
+    </div>
+
+    <div class="form-group">
+      <label for="bonus">Bonus</label>
+      <input id="bonus"
+             type="number"
+             formControlName="bonus"
+             min="0">
+
+      <small *ngIf="form.controls.bonus.touched && form.controls.bonus.invalid">
+        Bonus cannot be negative.
+      </small>
+    </div>
+
+    <div class="form-group">
+      <label for="deduction">Deduction</label>
+      <input id="deduction"
+             type="number"
+             formControlName="deduction"
+             min="0">
+
+      <small *ngIf="form.controls.deduction.touched && form.controls.deduction.invalid">
+        Deduction cannot be negative.
+      </small>
+    </div>
+
+    <div class="form-group">
+      <label for="effectiveFrom">Effective From</label>
+      <input id="effectiveFrom"
+             type="date"
+             formControlName="effectiveFrom">
+
+      <small *ngIf="form.controls.effectiveFrom.touched && form.controls.effectiveFrom.invalid">
+        Effective date is required.
+      </small>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" [disabled]="isSaving">
+        {{ isSaving ? 'Saving...' : 'Save Salary' }}
+      </button>
+
+      <a [routerLink]="['/employees', employeeId, 'salary']">
+        Cancel
+      </a>
+    </div>
+
+  </form>
+</section>

@@ -8,6 +8,8 @@ import { DashboardHomeComponent } from './features/dashboard/dashboard-home/dash
 import { EmployeeListComponent } from './features/employees/employee-list/employee-list.component';
 import { EmployeeFormComponent } from './features/employees/employee-form/employee-form.component';
 import { EmployeeDetailsComponent } from './features/employees/employee-details/employee-details.component';
+import { SalaryDetailsComponent } from './features/salaries/salary-details/salary-details.component';
+import { SalaryFormComponent } from './features/salaries/salary-form/salary-form.component';
 import { NotFoundComponent } from './features/not-found/not-found.component';
 
 export const routes: Routes = [
@@ -36,6 +38,14 @@ export const routes: Routes = [
       {
         path: 'employees/new',
         component: EmployeeFormComponent
+      },
+      {
+        path: 'employees/:id/salary',
+        component: SalaryDetailsComponent
+      },
+      {
+        path: 'employees/:id/salary/edit',
+        component: SalaryFormComponent
       },
       {
         path: 'employees/:id',

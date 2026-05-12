@@ -94,6 +94,14 @@
     </ng-template>
 
     <div class="card-actions">
+      <a [routerLink]="['/employees', employee.id, 'salary']">
+        View Salary
+      </a>
+
+      <a [routerLink]="['/employees', employee.id, 'salary', 'edit']">
+        {{ salary ? 'Update Salary' : 'Create Salary' }}
+      </a>
+
       <a [routerLink]="['/payrolls']" [queryParams]="{ employeeId: employee.id }">
         Payroll History
       </a>
