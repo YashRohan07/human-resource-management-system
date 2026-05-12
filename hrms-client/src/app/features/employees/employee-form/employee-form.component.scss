@@ -1,0 +1,83 @@
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+h1 {
+  margin: 0 0 6px;
+}
+
+p {
+  margin: 0;
+  color: #666666;
+}
+
+a {
+  color: #222222;
+}
+
+.form-card {
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 9px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+small {
+  display: block;
+  margin-top: 5px;
+  color: #c0392b;
+}
+
+.form-actions {
+  margin-top: 20px;
+}
+
+button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 4px;
+  background: #222222;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+  button:disabled {
+    background: #999999;
+    cursor: not-allowed;
+  }
+
+.message {
+  padding: 16px;
+  text-align: center;
+  color: #666666;
+}
+
+.error-message {
+  padding: 12px;
+  margin-bottom: 12px;
+  color: #c0392b;
+}

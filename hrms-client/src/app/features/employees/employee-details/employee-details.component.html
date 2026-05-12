@@ -1,0 +1,102 @@
+<section class="page-header">
+  <div>
+    <h1>Employee Details</h1>
+    <p>View employee information and current salary.</p>
+  </div>
+
+  <a routerLink="/employees">
+    Back to List
+  </a>
+</section>
+
+<div class="message" *ngIf="isLoading">
+  Loading employee...
+</div>
+
+<div class="error-message" *ngIf="errorMessage">
+  {{ errorMessage }}
+</div>
+
+<section class="details-grid" *ngIf="employee && !isLoading">
+
+  <div class="details-card">
+    <h2>Basic Information</h2>
+
+    <div class="details-row">
+      <span>Name</span>
+      <strong>{{ employee.fullName }}</strong>
+    </div>
+
+    <div class="details-row">
+      <span>Email</span>
+      <strong>{{ employee.email }}</strong>
+    </div>
+
+    <div class="details-row">
+      <span>Phone</span>
+      <strong>{{ employee.phone }}</strong>
+    </div>
+
+    <div class="details-row">
+      <span>Department</span>
+      <strong>{{ employee.department }}</strong>
+    </div>
+
+    <div class="details-row">
+      <span>Position</span>
+      <strong>{{ employee.position }}</strong>
+    </div>
+
+    <div class="details-row">
+      <span>Account Number</span>
+      <strong>{{ employee.accountNumber }}</strong>
+    </div>
+
+    <div class="details-row">
+      <span>Status</span>
+      <strong>{{ employee.employmentStatus }}</strong>
+    </div>
+
+    <div class="card-actions">
+      <a [routerLink]="['/employees', employee.id, 'edit']">
+        Edit Employee
+      </a>
+    </div>
+  </div>
+
+  <div class="details-card">
+    <h2>Current Salary</h2>
+
+    <ng-container *ngIf="salary; else noSalary">
+      <div class="details-row">
+        <span>Basic Salary</span>
+        <strong>{{ salary.basicSalary }}</strong>
+      </div>
+
+      <div class="details-row">
+        <span>Bonus</span>
+        <strong>{{ salary.bonus }}</strong>
+      </div>
+
+      <div class="details-row">
+        <span>Deduction</span>
+        <strong>{{ salary.deduction }}</strong>
+      </div>
+
+      <div class="details-row">
+        <span>Effective From</span>
+        <strong>{{ salary.effectiveFrom | date }}</strong>
+      </div>
+    </ng-container>
+
+    <ng-template #noSalary>
+      <p class="muted">{{ salaryMessage }}</p>
+    </ng-template>
+
+    <div class="card-actions">
+      <a [routerLink]="['/payrolls']" [queryParams]="{ employeeId: employee.id }">
+        Payroll History
+      </a>
+    </div>
+  </div>
+</section>

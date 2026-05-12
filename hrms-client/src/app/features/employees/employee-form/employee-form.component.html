@@ -1,0 +1,80 @@
+<section class="page-header">
+  <div>
+    <h1>{{ isEditMode ? 'Edit Employee' : 'Add Employee' }}</h1>
+    <p>{{ isEditMode ? 'Update employee information.' : 'Create a new employee record.' }}</p>
+  </div>
+
+  <a routerLink="/employees">
+    Back to List
+  </a>
+</section>
+
+<div class="form-card">
+
+  <div class="message" *ngIf="isLoading">
+    Loading employee...
+  </div>
+
+  <div class="error-message" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <form *ngIf="!isLoading"
+        [formGroup]="employeeForm"
+        (ngSubmit)="onSubmit()">
+    <div class="form-grid">
+
+      <div class="form-group">
+        <label for="fullName">Full Name</label>
+        <input id="fullName" type="text" formControlName="fullName" />
+        <small *ngIf="hasError('fullName')">Full name is required.</small>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input id="email" type="email" formControlName="email" />
+        <small *ngIf="hasError('email')">Valid email is required.</small>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone</label>
+        <input id="phone" type="text" formControlName="phone" />
+        <small *ngIf="hasError('phone')">Phone is required.</small>
+      </div>
+
+      <div class="form-group">
+        <label for="department">Department</label>
+        <input id="department" type="text" formControlName="department" />
+        <small *ngIf="hasError('department')">Department is required.</small>
+      </div>
+
+      <div class="form-group">
+        <label for="position">Position</label>
+        <input id="position" type="text" formControlName="position" />
+        <small *ngIf="hasError('position')">Position is required.</small>
+      </div>
+
+      <div class="form-group">
+        <label for="accountNumber">Account Number</label>
+        <input id="accountNumber" type="text" formControlName="accountNumber" />
+        <small *ngIf="hasError('accountNumber')">Account number is required.</small>
+      </div>
+
+      <div class="form-group">
+        <label for="employmentStatus">Employment Status</label>
+        <select id="employmentStatus" formControlName="employmentStatus">
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
+          <option value="Terminated">Terminated</option>
+        </select>
+        <small *ngIf="hasError('employmentStatus')">Status is required.</small>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" [disabled]="isSaving">
+        {{ isSaving ? 'Saving...' : 'Save Employee' }}
+      </button>
+    </div>
+  </form>
+</div>

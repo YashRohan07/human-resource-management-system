@@ -1,0 +1,145 @@
+<section class="page-header">
+  <div>
+    <h1>Employees</h1>
+    <p>View, search and manage employee records.</p>
+  </div>
+
+  <a routerLink="/employees/new" class="primary-link">
+    Add Employee
+  </a>
+</section>
+
+<section class="filter-card">
+  <div class="filter-group">
+    <label for="search">Search</label>
+    <input id="search"
+           type="text"
+           [(ngModel)]="search"
+           placeholder="Name or email" />
+  </div>
+
+  <div class="filter-group">
+    <label for="department">Department</label>
+    <input id="department"
+           type="text"
+           [(ngModel)]="department"
+           placeholder="Department" />
+  </div>
+
+  <div class="filter-group">
+    <label for="status">Status</label>
+    <select id="status" [(ngModel)]="status">
+      <option value="">All</option>
+      <option value="Active">Active</option>
+      <option value="Inactive">Inactive</option>
+      <option value="Terminated">Terminated</option>
+    </select>
+  </div>
+
+  <div class="filter-group">
+    <label for="pageSize">Page Size</label>
+    <select id="pageSize"
+            [(ngModel)]="pageSize"
+            (change)="changePageSize()">
+      <option [ngValue]="5">5</option>
+      <option [ngValue]="10">10</option>
+      <option [ngValue]="20">20</option>
+    </select>
+  </div>
+
+  <div class="filter-actions">
+    <button type="button" (click)="applyFilters()">
+      Apply
+    </button>
+
+    <button type="button" class="secondary" (click)="clearFilters()">
+      Clear
+    </button>
+  </div>
+</section>
+
+<section class="table-card">
+
+  <div class="success-message" *ngIf="successMessage">
+    {{ successMessage }}
+  </div>
+
+  <div class="message" *ngIf="isLoading">
+    Loading employees...
+  </div>
+
+  <div class="error-message" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <table *ngIf="!isLoading && !errorMessage">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Department</th>
+        <th>Position</th>
+        <th>Status</th>
+        <th class="actions-column">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let employee of employees">
+        <td>{{ employee.fullName }}</td>
+        <td>{{ employee.email }}</td>
+        <td>{{ employee.department }}</td>
+        <td>{{ employee.position }}</td>
+        <td>{{ employee.employmentStatus }}</td>
+
+        <td class="actions">
+          <a [routerLink]="['/employees', employee.id]">
+            View
+          </a>
+
+          <a [routerLink]="['/employees', employee.id, 'edit']">
+            Edit
+          </a>
+
+          <button *ngIf="isAdmin"
+                  type="button"
+                  class="danger-link"
+                  (click)="openDeleteDialog(employee)">
+            Delete
+          </button>
+        </td>
+      </tr>
+
+      <tr *ngIf="employees.length === 0">
+        <td colspan="6" class="empty-state">
+          No employees found.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pagination" *ngIf="meta">
+    <button type="button"
+            (click)="previousPage()"
+            [disabled]="currentPage <= 1">
+      Previous
+    </button>
+
+    <span>
+      Page {{ meta.currentPage }} of {{ meta.totalPages }}
+      · Total {{ meta.totalCount }}
+    </span>
+
+    <button type="button"
+            (click)="nextPage()"
+            [disabled]="currentPage >= meta.totalPages">
+      Next
+    </button>
+  </div>
+</section>
+
+<app-confirm-dialog *ngIf="showDeleteDialog"
+                    title="Delete Employee"
+                    [message]="'Are you sure you want to delete ' + selectedEmployee?.fullName + '?'"
+                    (confirmed)="confirmDelete()"
+                    (cancelled)="closeDeleteDialog()"></app-confirm-dialog>
