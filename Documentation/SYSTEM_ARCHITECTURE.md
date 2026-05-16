@@ -1,12 +1,6 @@
 # System Architecture
 
-## Architecture Style
-
-This project follows a Layered Architecture approach.
-
-The goal is to keep the codebase clean, organized, and easy to maintain.
-
-Each layer is responsible for a specific part of the application.
+This project follows a layered architecture approach to keep the codebase clean, organized, and maintainable.
 
 ---
 
@@ -15,7 +9,7 @@ Each layer is responsible for a specific part of the application.
 ```text
 Angular Frontend
         ↓
-ASP.NET Core Controller
+ASP.NET Core Controllers
         ↓
 Service Layer
         ↓
@@ -28,7 +22,7 @@ SQL Server Database
 
 ---
 
-# Backend Architecture Overview
+# Backend Architecture
 
 ## Controllers
 
@@ -37,12 +31,13 @@ Controllers handle incoming HTTP requests and return API responses.
 ### Responsibilities
 
 - Receive requests
+- Validate request flow
 - Call service methods
 - Return API responses
 
-Controllers should remain thin and should not contain business logic.
+Controllers remain thin and do not contain business logic.
 
-Current implemented controllers:
+### Controllers
 
 - AuthController
 - EmployeesController
@@ -54,16 +49,16 @@ Current implemented controllers:
 
 ## Services
 
-Services contain application logic and business rules.
+Services contain business logic and application rules.
 
 ### Responsibilities
 
 - Handle business operations
 - Validate business rules
 - Coordinate repositories
-- Throw custom exceptions when needed
+- Throw business exceptions when needed
 
-Current implemented services:
+### Services
 
 - AuthService
 - EmployeeService
@@ -75,7 +70,7 @@ Current implemented services:
 
 ## Repositories
 
-Repositories handle database-related operations using Entity Framework Core.
+Repositories handle database operations using Entity Framework Core.
 
 ### Responsibilities
 
@@ -83,9 +78,7 @@ Repositories handle database-related operations using Entity Framework Core.
 - Insert/update/delete records
 - Keep EF Core logic separated from services
 
-Repositories should not contain business logic.
-
-Current implemented repositories:
+### Repositories
 
 - EmployeeRepository
 - SalaryRepository
@@ -110,7 +103,7 @@ ApplicationDbContext is the main EF Core database context.
 
 # Database Design Overview
 
-Current core modules:
+Main modules:
 
 - Authentication
 - Employees
@@ -118,21 +111,13 @@ Current core modules:
 - Payrolls
 - Dashboard Reporting
 
-The database uses:
-
-- Entity Framework Core
-- SQL Server
-- Fluent API configurations
-- Migrations
-- Stored Procedures
-
 ---
 
 # Entity Design
 
 ## BaseEntity
 
-Contains shared fields used by multiple entities.
+Contains common fields shared across entities.
 
 ### Common Fields
 
@@ -158,7 +143,7 @@ Soft deleted employees are automatically filtered using EF Core global query fil
 
 ---
 
-# Relationship Design
+# Relationships
 
 ## Employee → Salary
 
@@ -166,9 +151,7 @@ Soft deleted employees are automatically filtered using EF Core global query fil
 One-to-One
 ```
 
-Each employee can have zero or one current salary configuration.
-
-Salary records are updated directly without creating salary history rows.
+Each employee can have one current salary record.
 
 ---
 
@@ -178,9 +161,7 @@ Salary records are updated directly without creating salary history rows.
 One-to-Many
 ```
 
-Each employee can have multiple payroll records over time.
-
-Payroll history remains preserved permanently.
+Each employee can have multiple payroll records.
 
 ---
 
@@ -196,22 +177,20 @@ BonusSnapshot
 DeductionSnapshot
 ```
 
-This prevents old payroll history from changing if salary values are updated later.
-
-Salary updates affect only future payroll generation.
+This keeps historical payroll records unchanged even if salary data changes later.
 
 ---
 
 # Payroll Generation Flow
-
-Payroll generation follows this flow:
 
 ```text
 Get active employees
         ↓
 Load employee salaries
         ↓
-Validate duplicate payroll
+Validate salary effective date
+        ↓
+Check duplicate payroll
         ↓
 Calculate gross salary
         ↓
@@ -226,11 +205,9 @@ Save payroll records using transaction
 
 ---
 
-# Payroll Calculator
+# Payroll Calculation
 
-Payroll calculations are separated into a dedicated calculator service.
-
-Current formula:
+Current payroll formula:
 
 ```text
 Gross Salary = Basic Salary + Bonus
@@ -242,39 +219,11 @@ Net Salary = Gross Salary − Tax − Deduction
 
 ---
 
-# Query Models
-
-The project uses query models for stored procedure results.
-
-Example:
-
-```text
-PayrollSummaryResult
-```
-
-This model is not mapped as a database table.
-
----
-
-# Stored Procedures
-
-## sp_GetPayrollSummaryByMonth
-
-Used for payroll reporting and summary generation.
-
-Returns:
-
-- Department
-- TotalEmployees
-- TotalSalary
-
----
-
-# Dashboard Reporting Architecture
+# Dashboard Reporting
 
 Dashboard reporting uses aggregation queries and stored procedure reporting.
 
-Dashboard summary includes:
+### Dashboard Data
 
 - Total employees
 - Active employees
@@ -282,58 +231,19 @@ Dashboard summary includes:
 - Department-wise employee statistics
 - Department-wise payroll summaries
 
-Dashboard queries are handled directly inside `DashboardService` because the reporting logic is lightweight and aggregation-focused.
-
 ---
 
-# Frontend Architecture Overview
+# Stored Procedure
 
-The frontend is planned using Angular standalone components.
+## sp_GetPayrollSummaryByMonth
 
-Main frontend structure:
+Used for payroll summary reporting.
 
-```text
-core/
-shared/
-features/
-```
+### Returns
 
----
-
-## core/
-
-Contains application-wide services, guards, and interceptors.
-
-Examples:
-
-- auth.interceptor.ts
-- error.interceptor.ts
-- auth.guard.ts
-
----
-
-## shared/
-
-Contains reusable components, utilities, and interfaces.
-
-Examples:
-
-- shared models
-- reusable UI components
-- loading spinner
-
----
-
-## features/
-
-Contains feature-specific modules and screens.
-
-Examples:
-
-- employees
-- salaries
-- payrolls
-- dashboard
+- Department
+- TotalEmployees
+- TotalSalary
 
 ---
 
@@ -345,9 +255,10 @@ All APIs use versioned routes.
 /api/v1/
 ```
 
-Example:
+Examples:
 
 ```text
+/api/v1/auth
 /api/v1/employees
 /api/v1/salaries
 /api/v1/payrolls
@@ -360,7 +271,7 @@ Example:
 
 The backend uses a consistent API response structure through `ApiResponse<T>`.
 
-Example:
+### Success Response
 
 ```json
 {
@@ -370,7 +281,7 @@ Example:
 }
 ```
 
-Error example:
+### Error Response
 
 ```json
 {
@@ -386,54 +297,37 @@ Error example:
 
 # Employee Module Features
 
-Current employee module supports:
-
 - Employee CRUD operations
 - Pagination
-- Search by name or email
+- Search and filtering
 - Department filtering
 - Employment status filtering
-- Sorting
+- Sorting support
 - Soft delete
 
 ---
 
 # Salary Module Features
 
-Current salary module supports:
-
 - Create employee salary
-- Update employee salary
-- Get employee salary
-- Salary validation rules
+- Update salary information
+- Salary validation
 - Duplicate salary prevention
+- Effective date handling
 
 ---
 
 # Payroll Module Features
 
-Current payroll module supports:
-
 - Monthly payroll generation
 - Payroll duplicate prevention
-- Payroll transaction handling
 - Payroll pagination
 - Payroll filtering
 - Employee payroll history
-- Payroll summary reporting
-- Automatic payroll tax calculation
-
----
-
-# Dashboard Module Features
-
-Current dashboard module supports:
-
-- Total employee count
-- Active employee count
-- Current month payroll cost
-- Department-wise employee statistics
-- Department-wise payroll summary reporting
+- Payroll reporting
+- Automatic tax calculation
+- Salary snapshot preservation
+- Future payroll prevention
 
 ---
 
@@ -447,7 +341,7 @@ Global exception handling is managed through `ExceptionMiddleware`.
 - Return consistent error responses
 - Convert exceptions into proper HTTP status codes
 
-Examples:
+### Common Status Codes
 
 - 400 Bad Request
 - 401 Unauthorized
@@ -467,11 +361,11 @@ The project uses JWT-based authentication and role-based authorization.
 ```text
 User sends email and password
         ↓
-AuthController receives login request
+AuthController receives request
         ↓
-AuthService verifies user credentials
+AuthService validates credentials
         ↓
-PasswordHasher verifies BCrypt password hash
+PasswordHasher verifies password
         ↓
 JwtHelper generates JWT token
         ↓
@@ -494,25 +388,22 @@ Admin-only endpoints use:
 [Authorize(Roles = "Admin")]
 ```
 
-JWT tokens currently store:
+JWT tokens store:
 
 - User Id
 - Email
 - Role
 
-This allows the API to identify users and control role-based access without server-side sessions.
-
 ---
 
-## Current Security Features
+# Current Security Features
 
-- BCrypt password hashing
 - JWT token generation
+- JWT validation
 - Role-based authorization
 - Protected endpoints
-- Admin-only endpoints
-- 401 Unauthorized handling
-- 403 Forbidden handling
+- BCrypt password hashing
+- CORS configuration
 
 ---
 
@@ -520,11 +411,11 @@ This allows the API to identify users and control role-based access without serv
 
 Entity Framework Core migrations are used to manage database schema changes.
 
-Benefits:
+### Benefits
 
-- Keep database schema consistent
-- Track schema updates
-- Easier setup for development
+- Track schema changes
+- Keep database structure consistent
+- Easier development setup
 
 ---
 
@@ -542,8 +433,6 @@ http://localhost:4200
 
 # Middleware Pipeline
 
-Current middleware pipeline:
-
 ```text
 HTTPS Redirection
         ↓
@@ -557,5 +446,3 @@ Authorization
         ↓
 Controllers
 ```
-
-This setup keeps request handling centralized and easier to maintain.

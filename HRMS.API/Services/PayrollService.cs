@@ -49,6 +49,12 @@ public class PayrollService : IPayrollService
         var salaryMap = salaries.ToDictionary(x => x.EmployeeId);
 
         var payrolls = new List<Payroll>();
+        var eligibleEmployeeCount = 0;
+
+        var lastDateOfMonth = new DateTime(
+            request.Year,
+            request.Month,
+            DateTime.DaysInMonth(request.Year, request.Month));
 
         using var transaction = await _context.Database.BeginTransactionAsync();
 
@@ -61,6 +67,13 @@ public class PayrollService : IPayrollService
                     continue;
                 }
 
+                if (salary.EffectiveFrom.Date > lastDateOfMonth)
+                {
+                    continue;
+                }
+
+                eligibleEmployeeCount++;
+
                 var exists = await _payrollRepository.ExistsAsync(
                     employee.Id,
                     request.Month,
@@ -68,8 +81,7 @@ public class PayrollService : IPayrollService
 
                 if (exists)
                 {
-                    throw new ConflictException(
-                        "Payroll already generated for this month.");
+                    continue;
                 }
 
                 var grossSalary = _payrollCalculator.CalculateGrossSalary(
@@ -101,11 +113,16 @@ public class PayrollService : IPayrollService
                 payrolls.Add(payroll);
             }
 
+            if (eligibleEmployeeCount == 0)
+            {
+                throw new ConflictException(
+                    "No eligible employees found for payroll generation.");
+            }
+
             if (!payrolls.Any())
             {
-                await transaction.CommitAsync();
-
-                return [];
+                throw new ConflictException(
+                    "Payroll already exists for all eligible employees.");
             }
 
             await _payrollRepository.AddRangeAsync(payrolls);
@@ -119,7 +136,7 @@ public class PayrollService : IPayrollService
             await transaction.RollbackAsync();
 
             throw new ConflictException(
-                "Payroll already generated for this month.");
+                "Payroll already exists for one or more employees.");
         }
         catch
         {

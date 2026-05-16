@@ -18,17 +18,13 @@ Base Route:
 /api/v1/auth
 ```
 
-| Method | Endpoint      | Description                | Authorization  |
-| ------ | ------------- | -------------------------- | -------------- |
-| POST   | /login        | Login and return JWT token | Public         |
-| GET    | /profile      | Test protected user access | Logged-in User |
-| GET    | /admin-only   | Test admin-only access     | Admin Only     |
+| Method | Endpoint | Description | Authorization |
+|---|---|---|---|
+| POST | /login | Login and return JWT token | Public |
+| GET | /profile | Test protected user access | Logged-in User |
+| GET | /admin-only | Test admin-only access | Admin Only |
 
----
-
-# Login Request Example
-
-## Request
+## Login Request
 
 ```http
 POST /api/v1/auth/login
@@ -41,9 +37,7 @@ POST /api/v1/auth/login
 }
 ```
 
----
-
-## Success Response
+## Login Success Response
 
 ```json
 {
@@ -70,31 +64,27 @@ Base Route:
 /api/v1/employees
 ```
 
-| Method | Endpoint  | Description                                   | Authorization |
-| ------ | --------- | --------------------------------------------- | ------------- |
-| GET    | /         | Get employee list with pagination and filters | Admin, HR     |
-| GET    | /{id:int} | Get employee details                          | Admin, HR     |
-| POST   | /         | Create employee                               | Admin, HR     |
-| PUT    | /{id:int} | Update employee                               | Admin, HR     |
-| DELETE | /{id:int} | Soft delete employee                          | Admin Only    |
+| Method | Endpoint | Description | Authorization |
+|---|---|---|---|
+| GET | / | Get employee list with pagination and filters | Admin, HR |
+| GET | /{id:int} | Get employee details | Admin, HR |
+| POST | / | Create employee | Admin, HR |
+| PUT | /{id:int} | Update employee | Admin, HR |
+| DELETE | /{id:int} | Soft delete employee | Admin Only |
 
----
+## Employee Query Parameters
 
-# Employee Query Parameters
+| Parameter | Description |
+|---|---|
+| page | Page number |
+| pageSize | Number of items per page |
+| search | Search by employee name or email |
+| department | Filter by department |
+| status | Filter by employment status |
+| sortBy | Sort by email, department, status, or createdAt |
+| sortOrder | asc or desc |
 
-| Parameter  | Description                                     |
-| ---------- | ----------------------------------------------- |
-| page       | Page number                                     |
-| pageSize   | Number of items per page                        |
-| search     | Search by employee name or email                |
-| department | Filter by department                            |
-| status     | Filter by employment status                     |
-| sortBy     | Sort by email, department, status, or createdAt |
-| sortOrder  | asc or desc                                     |
-
----
-
-# Employee Create Request Example
+## Employee Create Request
 
 ```http
 POST /api/v1/employees
@@ -102,8 +92,8 @@ POST /api/v1/employees
 
 ```json
 {
-  "fullName": "John Doe",
-  "email": "john@hrms.com",
+  "fullName": "Yash Rohan",
+  "email": "yash@hrms.com",
   "phone": "01712345678",
   "department": "HR",
   "position": "HR Manager",
@@ -122,15 +112,13 @@ Base Route:
 /api/v1/salaries
 ```
 
-| Method | Endpoint                   | Description                | Authorization |
-| ------ | -------------------------- | -------------------------- | ------------- |
-| GET    | /employee/{employeeId:int} | Get employee salary        | Admin, HR     |
-| POST   | /                          | Create employee salary     | Admin, HR     |
-| PUT    | /{id:int}                  | Update employee salary     | Admin, HR     |
+| Method | Endpoint | Description | Authorization |
+|---|---|---|---|
+| GET | /employee/{employeeId:int} | Get employee salary details | Admin, HR |
+| POST | / | Create employee salary | Admin, HR |
+| PUT | /{id:int} | Update employee salary | Admin, HR |
 
----
-
-# Salary Create Request Example
+## Salary Create Request
 
 ```http
 POST /api/v1/salaries
@@ -146,9 +134,7 @@ POST /api/v1/salaries
 }
 ```
 
----
-
-# Salary Update Request Example
+## Salary Update Request
 
 ```http
 PUT /api/v1/salaries/1
@@ -163,17 +149,15 @@ PUT /api/v1/salaries/1
 }
 ```
 
----
+## Salary Validation Rules
 
-# Salary Validation Rules
-
-| Field         | Validation Rule        |
-| ------------- | ---------------------- |
-| employeeId    | Employee must exist    |
-| basicSalary   | Must be greater than 0 |
-| bonus         | Cannot be negative     |
-| deduction     | Cannot be negative     |
-| effectiveFrom | Required               |
+| Field | Validation Rule |
+|---|---|
+| employeeId | Employee must exist |
+| basicSalary | Must be greater than 0 |
+| bonus | Cannot be negative |
+| deduction | Cannot be negative |
+| effectiveFrom | Required |
 
 ---
 
@@ -185,17 +169,15 @@ Base Route:
 /api/v1/payrolls
 ```
 
-| Method | Endpoint                   | Description                  | Authorization |
-| ------ | -------------------------- | ---------------------------- | ------------- |
-| POST   | /generate                  | Generate monthly payroll     | Admin, HR     |
-| GET    | /                          | Get payroll list             | Admin, HR     |
-| GET    | /summary                   | Get payroll summary          | Admin, HR     |
-| GET    | /{id:int}                  | Get payroll details          | Admin, HR     |
-| GET    | /employee/{employeeId:int} | Get employee payroll history | Admin, HR     |
+| Method | Endpoint | Description | Authorization |
+|---|---|---|---|
+| POST | /generate | Generate monthly payroll | Admin, HR |
+| GET | / | Get payroll list | Admin, HR |
+| GET | /summary | Get payroll summary | Admin, HR |
+| GET | /{id:int} | Get payroll details | Admin, HR |
+| GET | /employee/{employeeId:int} | Get employee payroll history | Admin, HR |
 
----
-
-# Payroll Generate Request Example
+## Payroll Generate Request
 
 ```http
 POST /api/v1/payrolls/generate
@@ -208,44 +190,48 @@ POST /api/v1/payrolls/generate
 }
 ```
 
----
+## Payroll Query Parameters
 
-# Payroll Query Parameters
+| Parameter | Description |
+|---|---|
+| page | Page number |
+| pageSize | Number of items per page |
+| employeeId | Filter payroll by employee |
+| month | Filter payroll by month |
+| year | Filter payroll by year |
 
-| Parameter  | Description                          |
-| ---------- | ------------------------------------ |
-| page       | Page number                          |
-| pageSize   | Number of items per page             |
-| employeeId | Filter payroll by employee           |
-| month      | Filter payroll by month              |
-| year       | Filter payroll by year               |
-
----
-
-# Payroll Generate Success Response
+## Payroll Generate Success Response
 
 ```json
 {
   "success": true,
   "message": "Payroll generated successfully.",
-  "data": [],
+  "data": [
+    {
+      "employeeId": 1,
+      "employeeName": "John Doe",
+      "month": 5,
+      "year": 2026,
+      "grossSalary": 55000,
+      "tax": 5500,
+      "netSalary": 49500
+    }
+  ],
   "errors": null
 }
 ```
 
----
+## Payroll Validation Rules
 
-# Payroll Validation Rules
-
-| Field | Validation Rule        |
-| ----- | ---------------------- |
+| Field | Validation Rule |
+|---|---|
 | month | Must be between 1 and 12 |
-| year  | Must be greater than 2000 |
+| year | Must be greater than 2000 |
 
----
+## Payroll Business Rules
 
-# Payroll Business Rules
-
+- Payroll generates only for active employees
+- Salary effective date must be valid
 - Future month payroll generation is blocked
 - Duplicate payroll generation is blocked
 - Employee salary snapshot is stored during payroll generation
@@ -261,13 +247,11 @@ Base Route:
 /api/v1/dashboard
 ```
 
-| Method | Endpoint | Description           | Authorization |
-| ------ | -------- | --------------------- | ------------- |
-| GET    | /        | Get dashboard summary | Admin, HR     |
+| Method | Endpoint | Description | Authorization |
+|---|---|---|---|
+| GET | / | Get dashboard summary | Admin, HR |
 
----
-
-# Dashboard Response Data
+## Dashboard Response Data
 
 Dashboard summary includes:
 
@@ -301,8 +285,6 @@ Example:
 POST /api/v1/auth/login
 ```
 
----
-
 ## Protected Endpoint
 
 Protected endpoints require a valid JWT token.
@@ -312,8 +294,6 @@ Example:
 ```text
 GET /api/v1/employees
 ```
-
----
 
 ## Admin Only Endpoint
 
@@ -328,12 +308,3 @@ Example:
 ```text
 DELETE /api/v1/employees/{id}
 ```
-
----
-
-# Default Seed Users
-
-| Role  | Email          |
-| ------ | -------------- |
-| Admin | admin@hrms.com |
-| HR    | hr@hrms.com    |

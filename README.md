@@ -2,7 +2,7 @@
 
 A full-stack Human Resource Management System built using ASP.NET Core Web API and Angular.
 
-The project is being developed phase-by-phase with a focus on layered architecture, maintainable backend design, and clean development practices.
+The project was developed with a focus on clean layered architecture, maintainable backend design, and scalable payroll management.
 
 ---
 
@@ -14,66 +14,71 @@ The project is being developed phase-by-phase with a focus on layered architectu
 - Entity Framework Core
 - SQL Server
 - FluentValidation
-- BCrypt Password Hashing
 - JWT Authentication
-
----
+- BCrypt Password Hashing
 
 ## Frontend
 
 - Angular 19
+- Angular Material
+- RxJS
 
 ---
 
-# Current Features
+# Main Features
 
-- Employee entity structure
-- Salary entity structure
-- Payroll entity structure
-- Entity relationships
-- Soft delete support
-- SQL Server integration
-- Entity Framework Core migrations
-- Database indexes
-- Payroll summary stored procedure
-- Seed Admin and HR users
-- Global exception handling
-- CORS configuration
-- JWT login endpoint
-- Role-based authorization
-- Protected route testing
-- Admin-only endpoint testing
-- Employee CRUD operations
+## Authentication & Security
+
+- JWT Authentication
+- Role-based Authorization
+- Protected API endpoints
+- BCrypt password hashing
+
+---
+
+## Employee Management
+
+- Create employee
+- Update employee
+- Soft delete employee
+- Employee list pagination
 - Employee search and filtering
-- Employee pagination support
-- Employee sorting support
-- Employee soft delete support
-- Salary create endpoint
-- Salary update endpoint
-- Get employee salary endpoint
-- Salary validation support
-- Payroll generation endpoint
-- Payroll duplicate prevention
-- Payroll pagination support
-- Payroll filtering support
-- Employee payroll history endpoint
-- Payroll summary reporting
-- Dashboard summary endpoint
-- Department-wise employee statistics
-- Department-wise payroll statistics
+- Department and status filtering
+- Sorting support
 
 ---
 
-# Project Structure
+## Salary Management
 
-```text
-HRMS/
-│
-├── HRMS.API/
-├── hrms-client/
-├── Documentation/
-└── README.md
-```
+- Create employee salary
+- Update salary information
+- Salary validation rules
+- Effective date handling
+- Duplicate salary prevention
+
+---
+
+## Payroll Management
+
+- Monthly payroll generation
+- Payroll duplicate prevention
+- Automatic tax calculation
+- Payroll history
+- Payroll pagination and filtering
+- Payroll summary reporting
+- Future payroll prevention
+- Salary snapshot preservation
+- Historical payroll integrity
+
+---
+
+## Dashboard & Reporting
+
+- Total employee count
+- Active employee count
+- Current month payroll cost
+- Department-wise employee statistics
+- Department-wise payroll summary
 
 ---
 
@@ -93,18 +98,24 @@ ApplicationDbContext
 SQL Server
 ```
 
-Current implemented layers:
+---
 
-- Controllers
-- Services
-- Repositories
-- EF Core DbContext
+# Project Structure
+
+```text
+HRMS/
+│
+├── HRMS.API/
+├── hrms-client/
+├── Documentation/
+└── README.md
+```
 
 ---
 
 # Database Design
 
-Current core modules:
+Main modules:
 
 - Authentication
 - Employees
@@ -112,83 +123,58 @@ Current core modules:
 - Payrolls
 - Dashboard Reporting
 
-Main relationships:
+Relationships:
 
 ```text
-Employee → Salary = One-to-Zero-or-One
+Employee → Salary = One-to-One
 Employee → Payroll = One-to-Many
 ```
 
-Employees support soft delete functionality using global query filters.
+Soft delete is implemented using:
+
+```text
+IsDeleted = true
+```
+
+---
+
+# API Structure
+
+All APIs use versioned routes.
+
+```text
+/api/v1/
+```
+
+Example:
+
+```text
+/api/v1/auth
+/api/v1/employees
+/api/v1/salaries
+/api/v1/payrolls
+/api/v1/dashboard
+```
+
+---
+
+# Payroll Business Rules
+
+- Payroll generates only for active employees
+- Salary effective date must be valid
+- Duplicate payroll generation is blocked
+- Future payroll generation is prevented
+- Payroll salary values are stored as snapshots
 
 ---
 
 # Security
 
-Current security features:
-
+- JWT token generation and validation
+- Role-based endpoint protection
+- Protected routes
 - BCrypt password hashing
-- JWT Authentication
-- Role-based Authorization
-- Seed Admin and HR users
-- Protected API endpoints
-- Admin-only endpoint support
-
----
-
-# Employee Module Features
-
-Current employee module supports:
-
-- Create employee
-- Update employee
-- Soft delete employee
-- Get employee by id
-- Employee list pagination
-- Search by employee name or email
-- Department filtering
-- Employment status filtering
-- Sorting support
-
----
-
-# Salary Module Features
-
-Current salary module supports:
-
-- Create employee salary
-- Update employee salary
-- Get employee salary details
-- Salary validation rules
-- Duplicate salary prevention
-
----
-
-# Payroll Module Features
-
-Current payroll module supports:
-
-- Generate monthly payroll
-- Payroll duplicate prevention
-- Payroll tax calculation
-- Payroll pagination support
-- Payroll filtering by employee
-- Payroll filtering by month and year
-- Get payroll by id
-- Employee payroll history
-- Department payroll summary reporting
-
----
-
-# Dashboard Module Features
-
-Current dashboard module supports:
-
-- Total employee count
-- Active employee count
-- Current month payroll cost
-- Department-wise employee statistics
-- Department-wise payroll summary
+- CORS configuration
 
 ---
 
@@ -204,7 +190,7 @@ Used for payroll summary reporting.
 
 # Documentation
 
-Project documentation is available inside the `Documentation` folder.
+Detailed documentation is available inside the `Documentation` folder.
 
 - SYSTEM_ARCHITECTURE.md
 - DATABASE_SCHEMA.md
@@ -246,6 +232,7 @@ http://localhost:5243/swagger
 cd hrms-client
 
 npm install
+
 ng serve
 ```
 

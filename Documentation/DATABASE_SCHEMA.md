@@ -18,19 +18,17 @@ HRMSDb
 
 ## AppUsers
 
-Stores application login users.
-
-AppUsers are used only for system login and role-based access.
+Stores system login users.
 
 ### Columns
 
-| Column       | Type          | Notes                  |
-| ------------ | ------------- | ---------------------- |
-| Id           | int           | Primary Key            |
-| FullName     | nvarchar(150) | Required               |
-| Email        | nvarchar(150) | Unique                 |
+| Column | Type | Notes |
+|---|---|---|
+| Id | int | Primary Key |
+| FullName | nvarchar(150) | Required |
+| Email | nvarchar(150) | Unique |
 | PasswordHash | nvarchar(500) | BCrypt hashed password |
-| Role         | nvarchar(50)  | Admin / HR             |
+| Role | nvarchar(50) | Admin / HR |
 
 ---
 
@@ -38,44 +36,44 @@ AppUsers are used only for system login and role-based access.
 
 Stores employee information.
 
-Employee records support soft delete functionality.
+Employee records support soft delete.
 
 ### Columns
 
-| Column           | Type          | Notes                          |
-| ---------------- | ------------- | ------------------------------ |
-| Id               | int           | Primary Key                    |
-| FullName         | nvarchar(150) | Required                       |
-| Email            | nvarchar(150) | Unique                         |
-| Phone            | nvarchar(30)  | Required                       |
-| Department       | nvarchar(100) | Required                       |
-| Position         | nvarchar(100) | Required                       |
-| AccountNumber    | nvarchar(100) | Required                       |
-| EmploymentStatus | nvarchar(50)  | Active / Inactive / Terminated |
-| IsDeleted        | bit           | Soft delete flag               |
-| CreatedAt        | datetime2     | Auto managed                   |
-| UpdatedAt        | datetime2     | Auto managed                   |
+| Column | Type | Notes |
+|---|---|---|
+| Id | int | Primary Key |
+| FullName | nvarchar(150) | Required |
+| Email | nvarchar(150) | Unique |
+| Phone | nvarchar(30) | Required |
+| Department | nvarchar(100) | Required |
+| Position | nvarchar(100) | Required |
+| AccountNumber | nvarchar(100) | Required |
+| EmploymentStatus | nvarchar(50) | Active / Inactive / Terminated |
+| IsDeleted | bit | Soft delete flag |
+| CreatedAt | datetime2 | Auto managed |
+| UpdatedAt | datetime2 | Auto managed |
 
 ---
 
 ## Salaries
 
-Stores current employee salary information.
+Stores current salary information for employees.
 
-Each employee can have only one current salary record.
+Each employee can have one current salary record.
 
 ### Columns
 
-| Column        | Type          | Notes        |
-| ------------- | ------------- | ------------ |
-| Id            | int           | Primary Key  |
-| EmployeeId    | int           | Foreign Key  |
-| BasicSalary   | decimal(18,2) | Required     |
-| Bonus         | decimal(18,2) | Default 0    |
-| Deduction     | decimal(18,2) | Default 0    |
-| EffectiveFrom | datetime2     | Required     |
-| CreatedAt     | datetime2     | Auto managed |
-| UpdatedAt     | datetime2     | Auto managed |
+| Column | Type | Notes |
+|---|---|---|
+| Id | int | Primary Key |
+| EmployeeId | int | Foreign Key |
+| BasicSalary | decimal(18,2) | Required |
+| Bonus | decimal(18,2) | Default 0 |
+| Deduction | decimal(18,2) | Default 0 |
+| EffectiveFrom | datetime2 | Required |
+| CreatedAt | datetime2 | Auto managed |
+| UpdatedAt | datetime2 | Auto managed |
 
 ---
 
@@ -83,25 +81,25 @@ Each employee can have only one current salary record.
 
 Stores monthly payroll history.
 
-Payroll values are stored as snapshots so payroll history remains unchanged even if salary information changes later.
+Payroll values are stored as snapshots so old payroll records remain unchanged even if salary information changes later.
 
 ### Columns
 
-| Column              | Type          | Notes                   |
-| ------------------- | ------------- | ----------------------- |
-| Id                  | int           | Primary Key             |
-| EmployeeId          | int           | Foreign Key             |
-| Month               | int           | Payroll month           |
-| Year                | int           | Payroll year            |
-| BasicSalarySnapshot | decimal(18,2) | Salary snapshot         |
-| BonusSnapshot       | decimal(18,2) | Bonus snapshot          |
-| DeductionSnapshot   | decimal(18,2) | Deduction snapshot      |
-| Tax                 | decimal(18,2) | Tax amount              |
-| GrossSalary         | decimal(18,2) | Gross salary            |
-| NetSalary           | decimal(18,2) | Final salary            |
-| GeneratedAt         | datetime2     | Payroll generation date |
-| CreatedAt           | datetime2     | Auto managed            |
-| UpdatedAt           | datetime2     | Auto managed            |
+| Column | Type | Notes |
+|---|---|---|
+| Id | int | Primary Key |
+| EmployeeId | int | Foreign Key |
+| Month | int | Payroll month |
+| Year | int | Payroll year |
+| BasicSalarySnapshot | decimal(18,2) | Salary snapshot |
+| BonusSnapshot | decimal(18,2) | Bonus snapshot |
+| DeductionSnapshot | decimal(18,2) | Deduction snapshot |
+| Tax | decimal(18,2) | Tax amount |
+| GrossSalary | decimal(18,2) | Gross salary |
+| NetSalary | decimal(18,2) | Final salary |
+| GeneratedAt | datetime2 | Payroll generation date |
+| CreatedAt | datetime2 | Auto managed |
+| UpdatedAt | datetime2 | Auto managed |
 
 ---
 
@@ -113,9 +111,9 @@ Payroll values are stored as snapshots so payroll history remains unchanged even
 One-to-One
 ```
 
-One employee can have zero or one current salary record.
+Each employee can have one current salary record.
 
-An employee can be created first, and salary can be assigned later.
+Salary can be assigned after employee creation.
 
 ---
 
@@ -125,9 +123,9 @@ An employee can be created first, and salary can be assigned later.
 One-to-Many
 ```
 
-One employee can have many payroll records.
+One employee can have multiple payroll records.
 
-Payroll records are preserved permanently for payroll history tracking.
+Payroll records are kept for payroll history.
 
 ---
 
@@ -135,40 +133,35 @@ Payroll records are preserved permanently for payroll history tracking.
 
 Soft delete is implemented for employees.
 
-Instead of permanently removing employee records:
+Instead of permanently deleting an employee record:
 
 ```text
 IsDeleted = true
 ```
 
-Employee queries use a global query filter so soft deleted employees are automatically excluded from normal API responses.
+Normal employee queries exclude soft deleted records using a global query filter.
 
-This helps preserve payroll history and related records.
+This helps preserve payroll history.
 
 ---
 
-# Payroll Business Rules
-
-Current payroll generation rules:
+# Payroll Rules
 
 - Payroll is generated only for active employees
 - Employees without salary records are skipped
+- Salary effective date must be valid
 - Duplicate payroll generation is blocked
 - Future month payroll generation is blocked
-- Payroll generation uses database transactions
+- Payroll generation uses transactions
 - Payroll salary values are stored as snapshots
 
 ---
 
 # Dashboard Reporting
 
-Dashboard summary data is generated using:
+Dashboard summary data is generated using employee and payroll aggregation queries.
 
-- Employee aggregation queries
-- Payroll aggregation queries
-- Stored procedure reporting
-
-Dashboard reporting includes:
+Dashboard includes:
 
 - Total employees
 - Active employees
@@ -182,23 +175,15 @@ Dashboard reporting includes:
 
 ## AppUsers
 
-### Unique Login Email Index
+### IX_AppUser_Email
 
-```text
-IX_AppUser_Email
-```
-
-Prevents duplicate login emails for system users.
+Prevents duplicate login emails.
 
 ---
 
 ## Employees
 
-### Unique Email Index
-
-```text
-IX_Employee_Email
-```
+### IX_Employee_Email
 
 Prevents duplicate employee emails.
 
@@ -206,11 +191,7 @@ Prevents duplicate employee emails.
 
 ## Salaries
 
-### Unique Employee Salary Index
-
-```text
-IX_Salaries_EmployeeId
-```
+### IX_Salaries_EmployeeId
 
 Prevents multiple current salary records for the same employee.
 
@@ -218,21 +199,13 @@ Prevents multiple current salary records for the same employee.
 
 ## Payrolls
 
-### Unique Payroll Index
+### IX_Payroll_Employee_Month_Year
 
-```text
-IX_Payroll_Employee_Month_Year
-```
+Ensures only one payroll record exists per employee for a specific month and year.
 
-Prevents duplicate payroll generation for the same employee and month.
+### IX_Payroll_Month_Year
 
-### Payroll Search Index
-
-```text
-IX_Payroll_Month_Year
-```
-
-Improves payroll filtering performance.
+Improves payroll filtering by month and year.
 
 ---
 
@@ -240,14 +213,14 @@ Improves payroll filtering performance.
 
 ## sp_GetPayrollSummaryByMonth
 
-Returns department-wise payroll summary data.
+Used for department-wise payroll summary reporting.
 
 ### Parameters
 
 | Parameter | Type |
-| --------- | ---- |
-| @Month    | int  |
-| @Year     | int  |
+|---|---|
+| @Month | int |
+| @Year | int |
 
 ### Returns
 
@@ -261,9 +234,9 @@ Returns department-wise payroll summary data.
 
 Default users are added automatically during application startup if the database is empty.
 
-| Role  | Email          |
-| ------ | -------------- |
+| Role | Email |
+|---|---|
 | Admin | admin@hrms.com |
-| HR    | hr@hrms.com    |
+| HR | hr@hrms.com |
 
 Passwords are stored using BCrypt hashing.

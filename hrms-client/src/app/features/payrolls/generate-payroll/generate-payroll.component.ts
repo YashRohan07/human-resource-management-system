@@ -48,9 +48,10 @@ export class GeneratePayrollComponent {
         this.isSaving = false;
       },
       error: error => {
-        // Duplicate payroll usually comes back as 409 from the API.
         if (error?.status === 409) {
-          this.errorMessage = 'Payroll for selected month already exists.';
+          this.errorMessage =
+            error?.error?.message ||
+            'Payroll already exists for eligible employees.';
         } else {
           this.errorMessage =
             error?.error?.message || 'Payroll generation failed.';
