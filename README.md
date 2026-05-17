@@ -20,8 +20,6 @@ The project was developed with a focus on clean layered architecture, maintainab
 ## Frontend
 
 - Angular 19
-- Angular Material
-- RxJS
 
 ---
 

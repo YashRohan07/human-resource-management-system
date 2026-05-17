@@ -54,6 +54,7 @@ public class PayrollRepository : IPayrollRepository
         PayrollQueryDto query)
     {
         var payrollsQuery = _context.Payrolls
+            .IgnoreQueryFilters()
             .Include(x => x.Employee)
             .AsQueryable();
 
@@ -96,6 +97,7 @@ public class PayrollRepository : IPayrollRepository
     public async Task<Payroll?> GetByIdAsync(int id)
     {
         return await _context.Payrolls
+            .IgnoreQueryFilters()
             .Include(x => x.Employee)
             .FirstOrDefaultAsync(x => x.Id == id);
     }
@@ -104,6 +106,7 @@ public class PayrollRepository : IPayrollRepository
         int employeeId)
     {
         return await _context.Payrolls
+            .IgnoreQueryFilters()
             .Include(x => x.Employee)
             .Where(x => x.EmployeeId == employeeId)
             .OrderByDescending(x => x.Year)
